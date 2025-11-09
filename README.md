@@ -20,6 +20,9 @@ The methodology is heavily based on the techniques and statistical framework des
 -   **High Performance**: Computationally intensive tasks are parallelized using Rayon for significant speedups.
 -   **Dual Use**: Can be used as a simple command-line tool or as a library in other Rust projects.
 
+## Requirements
+Rust 2021 or greater.
+
 ## Installation
 
 You can install the CLI tool directly from the Git repository:
