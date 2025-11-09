@@ -121,7 +121,7 @@ pub mod ks {
     }
 
     /// The D- statistic measures the largest amount by which the ECDF is below the theoretical CDF.
-    fn compute_dminus(cdfvals: &Vec<f64>, n: usize) -> f64 {
+    fn compute_dminus(cdfvals: &[f64], n: usize) -> f64 {
         /*
         Computes D- as used in the Kolmogorov-Smirnov test.
         ...
