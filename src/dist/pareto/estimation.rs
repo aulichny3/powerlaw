@@ -12,8 +12,6 @@ use rayon::prelude::*;
 
 /// MLE estimator for the Pareto Type I alpha parameter.
 pub fn type1_alpha_hat(data: &[f64], x_min: f64, sorted: bool) -> f64 {
-    //! MLE estimator for Pareto Type I alpha parameter
-
     // Shared calculation for both branches (using iteration)
     let (n, sum): (f64, f64) = match sorted {
         false => {
