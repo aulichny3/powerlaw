@@ -137,7 +137,7 @@ pub mod sim {
                                 alpha: alpha,
                             }
                             .rv(rng.random());
-                          
+
                             synth.push(x);
                             continue;
                         }

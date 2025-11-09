@@ -206,7 +206,7 @@ pub fn likelihood(data: &mut [f64], x_mins: &Vec<f64>, alphas: &Vec<f64>) -> Log
         ll: f64::NEG_INFINITY,
     };
 
-    //sort in place to avoid cloning - what if we didn't sort? 
+    //sort in place to avoid cloning - what if we didn't sort?
     data.sort_by(|a, b| a.partial_cmp(b).unwrap());
 
     let n: usize = data.len();

@@ -27,7 +27,7 @@
 //!
 //! ```bash
 //! # Example: Fit a Power Law to data in 'Data/reference_data/blackouts.txt '
-//! cargo run -- fit Data/reference_data/blackouts.txt 
+//! cargo run -- fit Data/reference_data/blackouts.txt
 //!```
 //!
 //! ### `test` subcommand

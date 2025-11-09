@@ -79,7 +79,6 @@ pub fn gof(data: &Vec<f64>, x_mins: &Vec<f64>, alphas: &Vec<f64>) -> Fitment {
         .min_by(|a, b| a.D.partial_cmp(&b.D).unwrap()) // Find the best fit in parallel
         .unwrap(); // Unwrap is safe if x_mins/alphas are non-empty
 
-
     // The statistical error for the alpha parameter is reported in wikipedia as having this calculation based on:
     // MEJ Newman (2005) Power laws, Pareto distributions and Zipf's law, Contemporary Physics, 46:5, 323-351, DOI: 10.1080/00107510500052444
     // However a lit review of the cited material indicated no such thing.
