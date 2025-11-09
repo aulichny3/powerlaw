@@ -4,11 +4,11 @@
 // that can be found in the LICENSE-MIT or LICENSE-APACHE files
 // at the root of this source tree.
 
-//! The generic powerlaw distribution defined by Cf(x) where f(x) = x^(-alpha) and C is the normalizing constant to ensure the distribution integrates to 1
+//! The generic Power-Law distribution defined by Cf(x) where f(x) = x^(-alpha) and C is the normalizing constant to ensure the distribution integrates to 1
 //! where C = (alpha - 1) * x_min^(alpha - 1).
-//! Continuous, Unbounded Power Law which simplifies to a pareto type I.
+//! Continuous, Unbounded Power Law which simplifies to a Pareto Type I.
 //! However, the alpha parameter will be exactly 1.0 greater than that of more
-//! common expressions such as the pareto type I pdf listed at:
+//! common expressions such as the Pareto Type I pdf listed at:
 //! [https://en.wikipedia.org/wiki/Pareto_distribution](https://en.wikipedia.org/wiki/Pareto_distribution)
 use super::Distribution;
 use rand::prelude::*;
@@ -20,7 +20,7 @@ pub struct Powerlaw {
 }
 
 impl Distribution for Powerlaw {
-    /// Continuous, Unbounded Power Law which simplifies to a pareto type I.
+    /// Continuous, Unbounded Power Law which simplifies to a Pareto Type I.
     /// The alpha parameter will be exactly 1.0 greater than that of more
     /// common expressions such as the pdf listed at:
     /// <https://en.wikipedia.org/wiki/Pareto_distribution>
@@ -41,7 +41,7 @@ impl Distribution for Powerlaw {
 
     fn rv(&self, u: f64) -> f64 {
         /*
-        Random variate generation via inverse transform of the pareto type 1 pdf
+        Random variate generation via inverse transform of the Pareto Type I pdf
 
         Parameters
         ----------

@@ -140,7 +140,7 @@ pub fn find_alphas_exhaustive(data: &mut [f64]) -> (Vec<f64>, Vec<f64>) {
     * v.1: A `Vec<f64>` containing the corresponding MLE alpha estimates.
     */
 
-    //sort in place to avoid cloning - what if we didnt sort? then we dont need the mutable reference
+    //sort in place to avoid cloning - what if we didn't sort? then we don't need the mutable reference
     data.sort_by(|a, b| a.partial_cmp(b).unwrap());
 
     let mut alphas: Vec<f64> = Vec::with_capacity(data.len() - 1);
@@ -155,7 +155,7 @@ pub fn find_alphas_exhaustive(data: &mut [f64]) -> (Vec<f64>, Vec<f64>) {
         alphas.push(alpha);
     }
 
-    // gemini says this is slow
+    // Gemini says this is slow, criterion confirms.
     (data[..data.len() - 1].to_vec(), alphas)
 }
 
@@ -206,7 +206,7 @@ pub fn likelihood(data: &mut [f64], x_mins: &Vec<f64>, alphas: &Vec<f64>) -> Log
         ll: f64::NEG_INFINITY,
     };
 
-    //sort in place to avoid cloning - what if we didnt sort? then we dont need the mutable reference
+    //sort in place to avoid cloning - what if we didn't sort? 
     data.sort_by(|a, b| a.partial_cmp(b).unwrap());
 
     let n: usize = data.len();

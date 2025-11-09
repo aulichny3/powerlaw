@@ -62,7 +62,7 @@ pub mod sim {
         );
         // determine the size of the tail
         // Use a chain of iterator methods
-        let n_tail: &usize = &data.iter().filter(|&&x| x > *x_min).count();
+        let n_tail: &usize = &data.iter().filter(|&&x| x >= *x_min).count();
         //probability of the tail
         let p_tail: f64 = *n_tail as f64 / *n as f64;
 

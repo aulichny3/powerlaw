@@ -28,7 +28,7 @@ You can install the CLI tool directly from the Git repository:
 cargo install --git https://github.com/aulichny3/powerlaw.git
 ```
 
-Once published, it can be installed from [crates.io](https://crates.io):
+Or from [crates.io](https://crates.io):
 
 ```bash
 cargo install powerlaw
@@ -108,7 +108,7 @@ You can also use `powerlaw` as a library in your own Rust projects.
 
 ```toml
 [dependencies]
-powerlaw = "0.0.1" # Or the version you need
+powerlaw = "0.0.3" # Or the version you need
 ```
 
 **2. Example:**

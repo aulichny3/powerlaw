@@ -38,7 +38,6 @@ pub fn hypothesis_test(data: Vec<f64>, prec: f64, alpha: f64, x_min: f64, best_d
 
     // setup the simulation: number of sims, elements in each etc.
     let sim_params: SimParams = sim::calculate_sim_params(&prec, &data, &x_min);
-    //let (M, n, n_tail, p_tail) = sim_params;
 
     println!("{:?}", sim_params);
 
@@ -49,19 +48,15 @@ pub fn hypothesis_test(data: Vec<f64>, prec: f64, alpha: f64, x_min: f64, best_d
     let mut sim_ds = vec![];
 
     for mut i in S {
-        //let start = Instant::now(); // Record the start time
         // Step 1: test finding the MLE alphas for a given range of x_min and the data
         let alphas: (Vec<f64>, Vec<f64>) = find_alphas_fast(&mut i);
 
-        //let alphas: (Vec<f64>, Vec<f64>) = find_alphas_fast(r, & mut i);
         // Step 2: gof KS test the cdf of the proposed x_min and alpha hat vs the sample with x >= x_min.
         // this is to find the best x_min/alpha pair given the data
         let best_fit: Fitment = gof(&i, &alphas.0, &alphas.1);
         //println!("best fit {:?}", best_fit);
         sim_ds.push(best_fit.D);
         //println!("Best fit D {d}");
-        //let duration = start.elapsed(); // Calculate the elapsed time
-        //println!("loop took: {:.2?} seconds", duration);
     }
 
     let gt = sim_ds.iter().filter(|&x| *x > best_d).count();
