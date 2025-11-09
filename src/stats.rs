@@ -114,7 +114,7 @@ pub mod ks {
     }
 
     /// The D+ statistic measures the largest amount by which the ECDF is above the theoretical CDF.
-    fn compute_dplus(cdfvals: &Vec<f64>, n: usize) -> f64 {
+    fn compute_dplus(cdfvals: &[f64], n: usize) -> f64 {
         (1..=n)
             .map(|i| i as f64 / n as f64 - cdfvals[i - 1])
             .fold(f64::MIN, f64::max)
