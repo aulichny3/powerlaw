@@ -47,7 +47,7 @@ pub mod sim {
     /// Where the number of simulations required for the desired level of precision in the estimate is: 1/4 * prec^(-2). Ex. 1/4 * 0.01^(-2) = 2500 sims gives accuracy within 0.01
     pub fn calculate_sim_params(prec: &f64, data: &[f64], x_min: &f64) -> SimParams {
         // calculate number of sims based on desired precision
-        let M: usize = ((1. / 4.) * &prec.powf(-2.)) as usize;
+        let M: usize = ((1. / 4.) * prec.powf(-2.)) as usize;
 
         // sample size per sim exhaustive
         let n: &usize = &data.len();
