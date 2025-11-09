@@ -52,14 +52,6 @@ pub mod sim {
         // sample size per sim exhaustive
         let n: &usize = &data.len();
 
-        // sample size per sim scaled
-        //let n_scaled = (*n as f64 * r) as usize;
-
-        //println!("Generating {M} simulations of length {n} for exhaustive size {:?}", M * n);
-        println!(
-            "Generating {M} simulations of length {n} for size {:?}",
-            M * n
-        );
         // determine the size of the tail
         // Use a chain of iterator methods
         let n_tail: &usize = &data.iter().filter(|&&x| x >= *x_min).count();
