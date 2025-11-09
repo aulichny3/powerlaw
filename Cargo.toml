@@ -6,6 +6,7 @@ license = "MIT OR Apache-2.0"
 authors = ["Adam Ulichny <aulichny@protonmail.com>"]
 description = "A Rust library and command-line tool for analyzing power-law distributions in empirical data."
 categories = ["mathematics", "finance", "science"]
+repository = "https://github.com/aulichny3/powerlaw.git"
 
 [lib]
 name = "powerlaw"
