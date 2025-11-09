@@ -85,9 +85,8 @@ pub mod random {
     }
 }
 
-use crate::dist::pareto;
 /// Supporting functions for Kolmogorov–Smirnov testing for similarity between empirical and reference cumulative distribution functions.
-/// Given this function is called iteratively over the data during the goodness of fit portion in [pareto::gof()], it requires the observed data to be sorted.
+/// Given this function is called iteratively over the data during the goodness of fit portion in [crate::dist::pareto::gof()], it requires the observed data to be sorted.
 pub mod ks {
     use crate::dist::Distribution;
     /// 1 sample KS test based on a known cdf. This function requires a generic cdf closure/function such as what is defined in the [Distribution] trait.
