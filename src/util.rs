@@ -89,7 +89,7 @@ pub mod sim {
     ///
     ///This approach is commonly used in bootstrapping or simulation studies for extreme value analysis.
     pub fn generate_synthetic_datasets(
-        data: &Vec<f64>,
+        data: &[f64],
         x_min: f64,
         sim_params: SimParams,
         alpha: f64,
