@@ -14,7 +14,7 @@ use crate::util::sim::{self, SimParams};
 pub struct H0 {
     pub gt: usize,
     pub total: usize,
-    pub p: f64,
+    pub pval: f64,
 }
 
 pub fn hypothesis_test(data: Vec<f64>, prec: f64, alpha: f64, x_min: f64, best_d: f64) -> H0 {
@@ -39,7 +39,7 @@ pub fn hypothesis_test(data: Vec<f64>, prec: f64, alpha: f64, x_min: f64, best_d
     // setup the simulation: number of sims, elements in each etc.
     let sim_params: SimParams = sim::calculate_sim_params(&prec, &data, &x_min);
 
-    println!("{:?}", sim_params);
+    println!("Generating M = {:?} simulated datasets of length n = {:?} with tail event probability P(tail|data) = {:?}", sim_params.num_sims_m, sim_params.sim_len_n, sim_params.p_tail);
 
     let S: Vec<Vec<f64>> = sim::generate_synthetic_datasets(&data, x_min, sim_params, alpha);
     let sim_size: usize = S.len();
@@ -65,12 +65,12 @@ pub fn hypothesis_test(data: Vec<f64>, prec: f64, alpha: f64, x_min: f64, best_d
     //let p = gt as f64 / n as f64;
     //println!("gt {gt} n {n} p is: {p}");
 
-    let p = gt as f64 / sim_size as f64;
+    let p_val = gt as f64 / sim_size as f64;
     //println!("gt {gt} n {sim_size} p is: {p}");
     //(gt, sim_size, p)
     H0 {
         gt: gt,
         total: sim_size,
-        p: p,
+        pval: p_val,
     }
 }
