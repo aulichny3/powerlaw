@@ -135,7 +135,7 @@ pub fn find_alphas_exhaustive(data: &mut [f64]) -> (Vec<f64>, Vec<f64>) {
     Returns:
     ----------
     Tuple of vectors:
-    * v.0: A `Vec<f64>` containing the $x$-min values used
+    * v.0: A `Vec<f64>` containing the x_min values used
     (which are data[0] through data[N-2] after sorting).
     * v.1: A `Vec<f64>` containing the corresponding MLE alpha estimates.
     */

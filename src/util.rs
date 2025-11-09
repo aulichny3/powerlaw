@@ -84,7 +84,7 @@ pub mod sim {
 
         assert_eq!(params.num_sims_m, 250000);
         assert_eq!(params.sim_len_n, X.len());
-        assert_eq!(params.n_tail, (n as f64 - xm - 1.) as usize);
+        assert_eq!(params.n_tail, (n as f64 - xm) as usize);
     }
 
     /// Generates multiple synthetic datasets using a hybrid model based on the input data and a proposed Pareto Type I fit. This process is fully parallelized,
@@ -145,8 +145,7 @@ pub mod sim {
                                 alpha: alpha,
                             }
                             .rv(rng.random());
-                            //let x = Pareto{x_min: x_min, alpha: alpha}.rv(&mut rng, 1)[0];
-                            //println!("random pareto is {x}");
+                          
                             synth.push(x);
                             continue;
                         }
