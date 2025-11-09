@@ -85,6 +85,7 @@ pub mod sim {
     /// Each simulated dataset (of size 'n') is constructed by mixing two sampling mechanisms:
     /// 1. Sampling from the 'lower' part of the original data (where x < x_min).
     /// 2. Sampling from a Pareto Type I distribution (defined by x_min and alpha).
+    /// 
     /// The probability of selecting the Pareto tail is controlled by 'p_tail'.
     ///
     ///This approach is commonly used in bootstrapping or simulation studies for extreme value analysis.
