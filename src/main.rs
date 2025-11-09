@@ -106,23 +106,3 @@ fn run_analysis(filepath: PathBuf, precision: Option<f64>) {
         }
     }
 }
-
-/*
-fn parse_config(args: &[String]) -> (f64, &str) {
-    if args.len() != 3 {
-        eprintln!("Usage: {} <precision> <filepath>", args[0]);
-        std::process::exit(1);
-    }
-
-    // first param
-    let prec: f64 = args[1].parse().unwrap_or_else(|_| {
-        eprintln!("Error: The first argument must be a valid floating-point number (f64).");
-        std::process::exit(1);
-    });
-
-    // second param
-    let filepath = &args[2];
-
-    (prec, filepath)
-}
-*/
