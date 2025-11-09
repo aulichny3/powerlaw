@@ -80,15 +80,13 @@ Precision: 0.01
 n: 211
 Pareto Type I parameters - alpha: 1.2726372198302858 x_min 230000.0 KS stat: 0.06067379629443781 tail length: 59
 Generic Power-Law [Cx^(-alpha)] parameters - alpha: 2.272637219830286 x_min 230000.0 KS stat: 0.06067379629443781 tail length: 59
-Calculating the level of uncertainty of the parameters...
-x_min std: 83965.71686981615 alpha std: 0.25568337126755664
-Testing the hypothesis that a powerlaw is a plausible fit to the data...
-Generating 2500 simulations of length 211 for size 527500
-SimParams { num_sims_m: 2500, sim_len_n: 211, n_tail: 58, p_tail: 0.27488151658767773 }
-Qty of sims with KS statistic > empirical data 1958
-Total sims 2500
-p-value: 0.7832
-Powerlaw distribution is a plausible fit to the data.
+Calculating the degree of uncertainty of the parameters...
+x_min std: 75388.370780452 alpha std: 0.2543727775138083
+Testing the null hypothesis H0 that a Power-Law is a plausible fit to the data...
+Generating M = 2500 simulated datasets of length n = 211 with tail size 59 and probability of the tail P(tail|data) = 0.2796208530805687
+Qty of simulations with KS statistic > empirical data = 1941
+p-value: 0.7764
+Fail to reject the null H0: Power-Law distribution is a plausible fit to the data.
 ```
 
 ### Getting Help
