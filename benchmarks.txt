@@ -1,0 +1,409 @@
+C:\Users\Adam\Documents\rust\powerlawrs>target\release\powerlawrs.exe
+Dplus, Dminus, D (0.19043370747050403, 0.2665622889005555, 0.2665622889005555)
+Best fit is {"alpha": 2.5918097284596784, "n": 647.0, "x_min": 0.021771771771771774, "D": 0.020087324414713836}
+Function took: 83.71s seconds
+x_min std 0.003851143339365026
+alpha std 0.12614707323900926
+
+C:\Users\Adam\Documents\rust\powerlawrs>target\release\powerlawrs.exe
+Dplus, Dminus, D (0.19043370747050403, 0.2665622889005555, 0.2665622889005555)
+Best fit is {"x_min": 0.021771771771771774, "D": 0.020087324414713836, "alpha": 2.5918097284596784, "n": 647.0}
+Function took: 82.38s seconds
+x_min std 0.0038280183816350086
+alpha std 0.12662184900559412
+
+Dplus, Dminus, D (0.19043370747050403, 0.2665622889005555, 0.2665622889005555)
+Best fit is {"n": 647.0, "x_min": 0.021771771771771774, "alpha": 2.5918097284596784, "D": 0.020087324414713836}
+
+Dplus, Dminus, D (0.19043370747050403, 0.2665622889005555, 0.2665622889005555)
+Best fit is {"D": 0.020087324414713836, "x_min": 0.021771771771771774, "n": 647.0, "alpha": 2.5918097284596784}
+Function took: 80.18s seconds
+x_min std 0.0038622972545396925
+alpha std 0.12740616769089147
+
+Dplus, Dminus, D (0.19043370747050403, 0.2665622889005555, 0.2665622889005555)
+Best fit is {"D": 0.020087324414713836, "x_min": 0.021771771771771774, "n": 647.0, "alpha": 2.5918097284596784}
+Function took: 78.62s seconds
+x_min std 0.00384287194732563
+alpha std 0.12526818276469848
+
+Dplus, Dminus, D (0.19043370747050403, 0.2665622889005555, 0.2665622889005555)
+Best fit is {"n": 647.0, "D": 0.020087324414713836, "x_min": 0.021771771771771774, "alpha": 2.5918097284596784}
+Function took: 80.98s seconds
+x_min std 0.0038152189788027394
+alpha std 0.1283887522413042
+
+Dplus, Dminus, D (0.19043370747050403, 0.2665622889005555, 0.2665622889005555)
+Best fit is {"alpha": 2.5918097284596784, "x_min": 0.021771771771771774, "D": 0.020087324414713836, "n": 647.0}
+Function took: 77.81s seconds
+x_min std 0.0038117039189902134
+alpha std 0.12471183516741707
+
+8/15/2025 after making modules of supporting functions 
+abs_neg_rets.csv n=11346
+Dplus, Dminus, D (0.19043370747050403, 0.2665622889005555, 0.2665622889005555)
+Best fit is {"n": 443.0, "D": 0.027173028230899038, "alpha": 2.8164145188836995, "x_min": 0.028258258258258263}
+Function took: 68.65s seconds
+x_min std 0.006367506254119946
+alpha std 0.3010973129303242
+
+abs_neg_rets.csv n=11346
+Dplus, Dminus, D (0.19043370747050403, 0.2665622889005555, 0.2665622889005555)
+Best fit is {"D": 0.027173028230899038, "alpha": 2.8164145188836995, "n": 443.0, "x_min": 0.028258258258258263}
+Function took: 68.16s seconds
+x_min std 0.0067277239047994035
+alpha std 0.3090906174287623
+
+pos_rets.csv n = 12767
+Dplus, Dminus, D (0.19043370747050403, 0.2665622889005555, 0.2665622889005555)
+Best fit is {"n": 647.0, "D": 0.020087324414713836, "x_min": 0.021771771771771774, "alpha": 2.5918097284596784}
+Function took: 69.30s seconds
+x_min std 0.0037889807824749654
+alpha std 0.12585577628101918
+
+8/17/2025 after using arc on the param_est function which is step 3
+abs_neg_rets.csv n=11346
+Dplus, Dminus, D (0.19043370747050403, 0.2665622889005555, 0.2665622889005555)
+Best fit is {"x_min": 0.028258258258258263, "D": 0.027173028230899038, "alpha": 2.8164145188836995, "n": 443.0}
+Function took: 7.04s seconds
+x_min std 0.007305061327989682
+alpha std 0.3883669342751675
+
+abs_neg_rets.csv n=11346
+Dplus, Dminus, D (0.19043370747050403, 0.2665622889005555, 0.2665622889005555)
+Best fit is {"x_min": 0.028258258258258263, "D": 0.027173028230899038, "alpha": 2.8164145188836995, "n": 443.0}
+Function took: 6.88s seconds
+x_min std 0.007193482043993055
+alpha std 0.3806914189486523
+
+8/24/25
+abs_neg_rets.csv n=11346
+Dplus, Dminus, D (0.19043370747050403, 0.2665622889005555, 0.2665622889005555)
+Best fit is {"D": 0.027173028230899038, "alpha": 2.8164145188836995, "x_min": 0.028258258258258263, "n": 443.0}
+Function took: 7.36s seconds
+x_min std 0.007239547937352176
+alpha std 0.38198057044823597
+
+pos_rets.csv n = 12767
+Dplus, Dminus, D (0.19043370747050403, 0.2665622889005555, 0.2665622889005555)
+Best fit is {"n": 647.0, "D": 0.020087324414713836, "alpha": 2.5918097284596784, "x_min": 0.021771771771771774}
+Function took: 7.09s seconds
+x_min std 0.003513031225850293
+alpha std 0.1616569811563483
+
+8/30/25 
+abs_neg_rets.csv n = 11346, testing alpha MLE search based on actual values
+Dplus, Dminus, D (0.19043370747050403, 0.2665622889005555, 0.2665622889005555)
+Best fit is {"alpha": 2.818509822842303, "x_min": 0.028220540345670175, "D": 0.026855616988212594, "n": 445.0}
+Function took: 7.51s seconds
+x_min std 0.007063907709296505
+alpha std 0.3745877938144069
+
+8/31
+C:\Users\Adam\Documents\rust\powerlawrs>.\target\release\powerlawrs.exe
+Dplus, Dminus, D (0.19043370747050403, 0.2665622889005555, 0.2665622889005555)
+findalphas2 took: 1.61s seconds
+gof2 took: 1.16s seconds
+Best fit is Fitment { x_min: 0.028220540345670175, alpha: 2.818509822842303, D: 0.026855616988212594 }
+Generating 24 simulations of lenth 11345 for size 272280
+Final sim shape: 24
+gt 12 n 24 p is: 0.5
+Function took: 57.99s seconds
+
+9/1/25
+C:\Users\Adam\Documents\rust\powerlawrs>.\target\release\powerlawrs.exe
+findalphas2 took: 1.21s seconds
+gof took: 1.18s seconds
+Best fit is Fitment { x_min: 0.028220540345670175, alpha: 2.8185098228423016, D: 0.026855616988212483 }
+Generating 24 simulations of lenth 11345 for size 272280
+Final sim shape: 24
+gt 11 n 24 p is: 0.4583333333333333
+Function took: 51.49s seconds
+
+// this is by NOT sorting the data prior to finding the alphas, 
+//note the alpha value is now different
+findalphas2 took: 770.37ms seconds
+gof took: 1.18s seconds
+Best fit is Fitment { x_min: 0.02851048492291458, alpha: 2.715040070670549, D: 0.02308585525183604 }
+Generating 24 simulations of lenth 11345 for size 272280
+Final sim shape: 24
+gt 14 n 24 p is: 0.5833333333333334
+Function took: 44.39s seconds
+
+C:\Users\Adam\Documents\rust\powerlawrs>.\target\release\powerlawrs.exe
+findalphas2 took: 759.89ms seconds
+gof took: 1.45s seconds
+Best fit is Fitment { x_min: 0.028220540345670175, alpha: 2.8185098228423016, D: 0.026855616988212483 }
+Generating 24 simulations of lenth 11345 for size 272280
+Final sim shape: 24
+gt 12 n 24 p is: 0.5
+Function took: 46.62s seconds
+
+C:\Users\Adam\Documents\rust\powerlawrs>.\target\release\powerlawrs.exe
+findalphas2 took: 878.48ms seconds
+gof took: 1.13s seconds
+Best fit is Fitment { x_min: 0.028220540345670175, alpha: 2.8185098228423016, D: 0.026855616988212483 }
+Generating 24 simulations of lenth 11345 for size 272280
+Final sim shape: 24
+gt 12 n 24 p is: 0.5
+Function took: 46.36s seconds
+
+*** This will be an approximation as it does not do an exhaustive search for the best alpha
+*** but it is MUCH faster
+C:\Users\Adam\Documents\rust\powerlawrs>.\target\release\powerlawrs.exe
+findalphas3 took: 39.78ms seconds
+gof took: 208.82ms seconds
+Best fit is Fitment { x_min: 0.02827415029663411, alpha: 2.8208812880315737, D: 0.027014288380088458 }
+Generating 24 simulations of length 11345 for size 272280
+Final sim shape: 24
+loop took: 234.89ms seconds
+gt 17 n 24 p is: 0.7083333333333334
+Function took: 5.81s seconds
+
+10/18/25 Now on linux
+adam@desktop5810:~/Documents/rust/powerlawrs$ ./target/release/powerlawrs 
+findalphas3 took: 58.36ms seconds
+gof took: 144.01ms seconds
+Best fit is Fitment { x_min: 0.02827415029663411, alpha: 2.8208812880315737, D: 0.027014288380088458 }
+I have prec of 0.1
+Generating 24 simulations of length 11345 for exhaustive size 272280
+Generating 24 simulations of length 2269 for exhaustive size 54456
+Final sim shape: 24
+gt 10 n 24 p is: 0.4166666666666667
+Function took: 3.62s seconds
+
+adam@desktop5810:~/Documents/rust/powerlawrs$ ./target/release/powerlawrs 
+findalphas3 took: 55.66ms seconds
+gof took: 145.32ms seconds
+Best fit is Fitment { x_min: 0.02827415029663411, alpha: 2.8208812880315737, D: 0.027014288380088458 }
+I have prec of 0.01
+Generating 2500 simulations of length 11345 for exhaustive size 28362500
+Generating 2500 simulations of length 2269 for exhaustive size 5672500
+Final sim shape: 2500
+gt 1265 n 2500 p is: 0.506
+Function took: 360.78s seconds
+
+10/19/25
+adam@desktop5810:~/Documents/rust/powerlawrs$ ./target/release/powerlawrs 
+findalphas3 took: 210.33ms seconds
+gof took: 581.72ms seconds
+Best fit is Fitment { x_min: 0.028243995372737935, alpha: 2.8187616278733096, D: 0.026919461974367787 }
+I have prec of 0.01
+Generating 2500 simulations of length 11345 for exhaustive size 28362500
+Generating 2500 simulations of length 2269 for exhaustive size 5672500
+Final sim shape: 2500
+gt 1361 n 2500 p is: 0.5444
+Function took: 363.18s seconds
+
+10/20/25 split hypothesis test function in multiple smaller functions
+adam@desktop5810:~/Documents/rust/powerlawrs$ ./target/release/powerlawrs 
+File: Data/abs_neg_rets.csv
+r: 0.2, prec: 0.1, fast: true, n: 11345
+Alpha search took: 55.44ms seconds
+gof took: 136.62ms seconds
+Best fit is Fitment { x_min: 0.02827415029663411, alpha: 2.8208812880315737, D: 0.027014288380088458 }
+Generating 24 simulations of length 2269 for exhaustive size 54456
+n: 11345 n_tail: 443 p_tail is 0.03904803878360511
+gt 12 n 24 p is: 0.5
+Function took: 3.58s seconds
+
+testing alpha_hat_fast *its faster!
+adam@desktop5810:~/Documents/rust/powerlawrs$ ./target/release/powerlawrs 
+File: Data/abs_neg_rets.csv
+r: 0.2, prec: 0.1, fast: true, n: 11345
+Alpha search took: 36.03ms seconds
+gof took: 146.70ms seconds
+Best fit is Fitment { x_min: 0.02827415029663411, alpha: 2.8208812880315737, D: 0.027014288380088458 }
+Generating 24 simulations of length 2269 for exhaustive size 54456
+n: 11345 n_tail: 443 p_tail is 0.03904803878360511
+gt 9 n 24 p is: 0.375
+Function took: 3.22s seconds
+
+### This is origional alpha2 (exhaustive x_min search) with alpha_hat_fast ###
+adam@desktop5810:~/Documents/rust/powerlawrs$ ./target/release/powerlawrs 
+File: Data/abs_neg_rets.csv
+r: 0.2, prec: 0.1, fast: false, n: 11345 # r does not apply
+Alpha search took: 647.30ms seconds
+gof took: 780.57ms seconds
+Best fit is Fitment { x_min: 0.028220540345670175, alpha: 2.8185098228423016, D: 0.026855616988212483 }
+Generating 24 simulations of length 2269 for exhaustive size 54456
+n: 11345 n_tail: 444 p_tail is 0.03913618334067871
+gt 13 n 24 p is: 0.5416666666666666
+Function took: 31.03s seconds
+
+### This is find_alpha2_faster (exhaustive x_min search) with alpha_hat_fast ### 
+### THE ALPHA VALUE IS NOW DIFFERENT ###
+adam@desktop5810:~/Documents/rust/powerlawrs$ ./target/release/powerlawrs 
+File: Data/abs_neg_rets.csv
+r: 0.2, prec: 0.1, fast: false, n: 11345 # r does not apply
+Alpha search took: 971.87µs seconds
+gof took: 845.51ms seconds
+Best fit is Fitment { x_min: 0.028220540345670175, alpha: 2.8185098228422762, D: 0.026855616988209263 }
+Generating 24 simulations of length 2269 for exhaustive size 54456
+n: 11345 n_tail: 444 p_tail is 0.03913618334067871
+gt 13 n 24 p is: 0.5416666666666666
+Function took: 17.27s seconds
+
+adam@desktop5810:~/Documents/rust/powerlawrs$ ./target/release/powerlawrs 
+File: Data/abs_neg_rets.csv
+r: 1, prec: 0.1, fast: false, n: 11345
+Alpha search took: 987.12µs seconds
+gof took: 800.12ms seconds
+Best fit is Fitment { x_min: 0.028220540345670175, alpha: 2.8185098228422762, D: 0.026855616988209263 }
+Generating 24 simulations of length 11345 for exhaustive size 272280
+n: 11345 n_tail: 444 p_tail is 0.03913618334067871
+gt 9 n 24 p is: 0.375
+Function took: 17.16s seconds
+
+10/21/2025 CONCLUSION
+The function "find_alphas_fast" with the linspace method is potentially very inaccurate when compared to iterating
+over all of the observed values. It's functionality will be removed. 
+
+The two fully iterative approaches to alpha paramater searching are both accurate with 12 decimals of each other
+
+10/23/25 updated gof and ks1_samp using fast alpha
+adam@desktop5810:~/Documents/rust/powerlawrs$ ./target/release/powerlawrs 
+File: Data/abs_neg_rets.csv
+prec: 0.1, fast: true, n: 11345
+x_min/alpha pair generation took: 946.39µs seconds
+gof took: 228.57ms seconds
+Best fit is Fitment { x_min: 0.028220540345670175, alpha: 2.8185098228422762, D: 0.026855616988209263 }
+Generating 24 simulations of length 11345 for size 272280
+n: 11345 n_tail: 444 p_tail is 0.03913618334067871
+gt 9 n 24 p is: 0.375
+Function took: 4.46s seconds
+**** Major spedups!***
+
+adam@desktop5810:~/Documents/rust/powerlawrs$ ./target/release/powerlawrs 
+File: Data/abs_neg_rets.csv
+prec: 0.01, fast: true, n: 11345
+x_min/alpha pair generation took: 920.03µs seconds
+gof took: 231.90ms seconds
+Best fit is Fitment { x_min: 0.028220540345670175, alpha: 2.8185098228422762, D: 0.026855616988209263 }
+Generating 2500 simulations of length 11345 for size 28362500
+n: 11345 n_tail: 444 p_tail is 0.03913618334067871
+gt 1211 n 2500 p is: 0.4844
+Function took: 466.24s seconds
+
+10/25/2025 **We now have command line arguments!!
+adam@desktop5810:~/Rust/powerlawrs$ ./target/release/powerlawrs 0.1 true "Data/pos_rets.csv"
+File: Data/pos_rets.csv
+prec: 0.1, fast: true, n: 12766
+x_min/alpha pair generation took: 1.09ms seconds
+gof took: 245.95ms seconds
+Best fit is Fitment { x_min: 0.02176148680473876, alpha: 2.592640518635968, D: 0.020096714012411754 }
+Generating 24 simulations of length 12766 for size 306384
+n: 12766 n_tail: 647 p_tail is 0.05068149772834091
+gt 14 n 24 p is: 0.5833333333333334
+Function took: 5.63s seconds
+
+adam@desktop5810:~/Rust/powerlawrs$ ./target/release/powerlawrs 0.01 true "Data/pos_rets.csv"
+File: Data/pos_rets.csv
+prec: 0.01, fast: true, n: 12766
+x_min/alpha pair generation took: 1.11ms seconds
+gof took: 263.90ms seconds
+Best fit is Fitment { x_min: 0.02176148680473876, alpha: 2.592640518635968, D: 0.020096714012411754 }
+Generating 2500 simulations of length 12766 for size 31915000
+n: 12766 n_tail: 647 p_tail is 0.05068149772834091
+gt 1222 n 2500 p is: 0.4888
+Function took: 586.66s seconds
+
+## anonymous function for KS test, gof is now slightly faster
+adam@desktop5810:~/Rust/powerlawrs$ ./target/release/powerlawrs 0.1 true "Data/abs_neg_rets.csv"
+File: Data/abs_neg_rets.csv
+prec: 0.1, fast: true, n: 11345
+x_min/alpha pair generation took: 1.01ms seconds
+gof took: 200.88ms seconds
+Best fit is Fitment { x_min: 0.028220540345670175, alpha: 2.8185098228422762, D: 0.026855616988209263 }
+Generating 24 simulations of length 11345 for size 272280
+n: 11345 n_tail: 444 p_tail is 0.03913618334067871
+gt 10 n 24 p is: 0.4166666666666667
+Function took: 4.36s seconds
+
+10/26/25 param est speedups
+Before rayon
+adam@desktop5810:~/Rust/powerlawrs$ ./target/release/powerlawrs 0.1 true "Data/abs_neg_rets.csv"
+File: Data/abs_neg_rets.csv
+prec: 0.1, fast: true, n: 11345
+x_min/alpha pair generation took: 983.70µs seconds
+gof took: 195.99ms seconds
+Best fit is Fitment { x_min: 0.028220540345670175, alpha: 2.8185098228422762, D: 0.026855616988209263 }
+param est took: 18.12s seconds
+x_min std: 0.0073417907168759145 alpha std: 0.37829333758423767
+Generating 24 simulations of length 11345 for size 272280
+n: 11345 n_tail: 444 p_tail is 0.03913618334067871
+gt 14 n 24 p is: 0.5833333333333334
+Function took: 4.35s seconds
+
+after rayon
+adam@desktop5810:~/Rust/powerlawrs$ ./target/release/powerlawrs 0.1 true "Data/abs_neg_rets.csv"
+File: Data/abs_neg_rets.csv
+prec: 0.1, fast: true, n: 11345
+x_min/alpha pair generation took: 967.15µs seconds
+gof took: 195.89ms seconds
+Best fit is Fitment { x_min: 0.028220540345670175, alpha: 2.8185098228422762, D: 0.026855616988209263 }
+param est took: 17.92s seconds
+x_min std: 0.00677626136997258 alpha std: 0.3681311625505391
+Generating 24 simulations of length 11345 for size 272280
+n: 11345 n_tail: 444 p_tail is 0.03913618334067871
+gt 7 n 24 p is: 0.2916666666666667
+Function took: 4.35s seconds
+
+11/4/25 using traits for distributions:
+adam@desktop5810:~/Rust/powerlawrs$ ./target/release/powerlawrs 0.1 true "Data/abs_neg_rets.csv"
+File: Data/abs_neg_rets.csv
+prec: 0.1, fast: true, n: 11345
+x_min/alpha pair generation took: 931.15µs seconds
+gof took: 207.62ms seconds
+Best fit is Fitment { x_min: 0.028220540345670175, alpha: 2.8185098228422762, D: 0.026855616988209263, alpha_SE: 0.13361017943338419, len_tail: 445 }
+Generating 24 simulations of length 11345 for size 272280
+n: 11345 n_tail: 444 p_tail is 0.03913618334067871
+gt 12 n 24 p is: 0.5
+Function took: 4.67s seconds
+
+method chaining:
+adam@desktop5810:~/Rust/powerlawrs$ ./target/release/powerlawrs 0.1 true "Data/abs_neg_rets.csv"
+File: Data/abs_neg_rets.csv
+prec: 0.1, fast: true, n: 11345
+x_min/alpha pair generation took: 955.98µs seconds
+gof took: 198.71ms seconds
+Best fit is Fitment { x_min: 0.028220540345670175, alpha: 2.8185098228422762, D: 0.026855616988209263, alpha_SE: 0.13361017943338419, len_tail: 445 }
+Generating 24 simulations of length 11345 for size 272280
+n: 11345 n_tail: 444 p_tail is 0.03913618334067871
+gt 10 n 24 p is: 0.4166666666666667
+Function took: 4.41s seconds
+
+canged module structure
+adam@desktop5810:~/Rust/powerlawrs$ ./target/release/powerlawrs 0.1 true "Data/abs_neg_rets.csv"
+File: Data/abs_neg_rets.csv
+prec: 0.1, fast: true, n: 11345
+x_min/alpha pair generation took: 963.75µs seconds
+gof took: 195.40ms seconds
+Best fit is Fitment { x_min: 0.028220540345670175, alpha: 2.8185098228422762, D: 0.026855616988209263, alpha_SE: 0.13361017943338419, len_tail: 445 }
+Generating 24 simulations of length 11345 for size 272280
+n: 11345 n_tail: 444 p_tail is 0.03913618334067871
+gt 11 n 24 p is: 0.4583333333333333
+Function took: 4.37s seconds
+
+adam@desktop5810:~/Rust/powerlawrs$ ./target/release/powerlawrs 0.1 true "Data/abs_neg_rets.csv"
+File: Data/abs_neg_rets.csv
+prec: 0.1, fast: true, n: 11345
+x_min/alpha pair generation took: 960.85µs seconds
+gof took: 196.91ms seconds
+Best fit is Fitment { x_min: 0.028220540345670175, alpha: 2.8185098228422762, D: 0.026855616988209263, alpha_SE: 0.13361017943338419, len_tail: 445 }
+Generating 24 simulations of length 11345 for size 272280
+n: 11345 n_tail: 444 p_tail is 0.03913618334067871
+gt 13 n 24 p is: 0.5416666666666666
+Function took: 4.43s seconds
+
+11/5/2025 added unit tests
+adam@desktop5810:~/Rust/powerlawrs$ ./target/release/powerlawrs 0.1 true "Data/abs_neg_rets.csv"
+File: Data/abs_neg_rets.csv
+prec: 0.1, fast: true, n: 11345
+x_min/alpha pair generation took: 975.25µs seconds
+gof took: 196.46ms seconds
+Best fit is Fitment { x_min: 0.028220540345670175, alpha: 2.8185098228422762, D: 0.026855616988209263, alpha_SE: 0.13361017943338419, len_tail: 445 }
+Generating 24 simulations of length 11345 for size 272280
+n: 11345 n_tail: 444 p_tail is 0.03913618334067871
+gt 13 n 24 p is: 0.5416666666666666
+Function took: 4.39s seconds
