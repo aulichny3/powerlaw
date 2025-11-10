@@ -47,7 +47,7 @@ pub fn gof(data: &Vec<f64>, x_mins: &Vec<f64>, alphas: &Vec<f64>) -> Fitment {
     let current_data_slice = sorted_data_vec.as_slice();
 
     // 3. Parallelize the iteration over x_mins/alphas using Rayon.
-    let mut best_fit = x_mins
+    let best_fit = x_mins
         .par_iter()
         .zip(alphas.par_iter()) // Iterate in parallel over both parameter vectors
         .map(|(&x_min, &alpha)| {
