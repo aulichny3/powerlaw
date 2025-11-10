@@ -152,7 +152,7 @@ fn main() {
 
 ```bash
 # Clone the repository
-git clone https://github.com/<your-username>/powerlaw.git
+git clone https://github.com/aulichny3/powerlaw
 cd powerlaw
 
 # Build in release mode
