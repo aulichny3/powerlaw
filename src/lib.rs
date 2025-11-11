@@ -60,7 +60,7 @@
 //! # Methodology
 //! The vast majority of this package is based on the procedure outlined in ‘Power-Law Distributions in Empirical Data’ by Clauset et al.
 //! # Limitations
-//! 1. Only the continuous case of the Pareto Type I Distribution is considered for parameter estimation, goodness of fit, and hypothesis testing at this time. This may or may not change with future updates.
+//! 1. Only the continuous case of the Pareto Type I Distribution is considered for parameter estimation, goodness of fit, and hypothesis testing at this time. This may or may not change with future updates. The example data in the documentation is discrete, thus the results are only an approximation.
 //! 2. Domain knowledge of the data generating process is critical given the methodology used by this package is based on that proposed by the referenced material.
 //! Specifically the 1 sample Kolmogorov-Smirnov test is used for goodness of fit testing which assumes i.i.d data. Many natural processes data are serially correlated, thus KS testing is not appropriate, see references section below.
 //! 3. This is highly alpha code; backwards compatibility is not guaranteed and should not be expected.

@@ -56,7 +56,10 @@ fn run_analysis(filepath: PathBuf, precision: Option<f64>) {
     let file_path_str = filepath.to_str().unwrap_or("invalid path");
 
     // read data from csv into vector
-    let mut data = util::read_csv(file_path_str).expect("Should be able to read the CSV file");
+    let mut X = util::read_csv(file_path_str).expect("Should be able to read the CSV file");
+
+    // initial data check to cli only, library assumes the user understands x_min > 0.
+    let mut data = util::check_data(&X);
 
     println!("Data: {}", file_path_str);
     if let Some(p) = precision {

@@ -60,7 +60,6 @@ pub mod random {
     /// let X = stats::random::random_choice(&data, 10); // could look like: [2.0, 2.0, 2.0, 3.0, 3.0, 3.0, 4.0, 3.0, 5.0, 4.0]
     /// ```
     pub fn random_choice(data: &[f64], size: usize) -> Vec<f64> {
-
         let mut samp: Vec<f64> = vec![];
 
         // Get a random number generator

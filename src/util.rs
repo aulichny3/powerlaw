@@ -7,6 +7,7 @@
 //! Module and its submodules containing various helper functions primarily around generating synthetic datasets.
 
 use csv::ReaderBuilder;
+use std::borrow::Cow;
 use std::error::Error;
 /// Returns *n* quantity of evenly spaced numbers over a specified interval. Motivated by numpy's [linspace](https://numpy.org/doc/stable/reference/generated/numpy.linspace.html).
 ///
@@ -85,7 +86,7 @@ pub mod sim {
     /// Each simulated dataset (of size 'n') is constructed by mixing two sampling mechanisms:
     /// 1. Sampling from the 'lower' part of the original data (where x < x_min).
     /// 2. Sampling from a Pareto Type I distribution (defined by x_min and alpha).
-    /// 
+    ///
     /// The probability of selecting the Pareto tail is controlled by 'p_tail'.
     ///
     ///This approach is commonly used in bootstrapping or simulation studies for extreme value analysis.
@@ -178,6 +179,19 @@ pub fn read_csv(file_path: &str) -> Result<Vec<f64>, Box<dyn Error>> {
         .collect();
 
     Ok(data)
+}
+
+/// Checks if a slice contains non-positive values (<= 0.0 or NaN).
+pub fn check_data(data: &[f64]) -> Vec<f64> {
+    if data.iter().any(|&x| !(x > 0.0)) {
+        eprintln!("Warning: Data contains non-positive values or NaN. Filtering applied.");
+
+        // Filter and return the new Vec
+        data.iter().filter(|&&x| x > 0.0).copied().collect()
+    } else {
+        // Clone and return a copy of the original Vec
+        data.to_vec()
+    }
 }
 
 #[cfg(test)]
