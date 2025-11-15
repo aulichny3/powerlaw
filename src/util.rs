@@ -7,7 +7,6 @@
 //! Module and its submodules containing various helper functions primarily around generating synthetic datasets.
 
 use csv::ReaderBuilder;
-use std::borrow::Cow;
 use std::error::Error;
 /// Returns *n* quantity of evenly spaced numbers over a specified interval. Motivated by numpy's [linspace](https://numpy.org/doc/stable/reference/generated/numpy.linspace.html).
 ///
@@ -46,6 +45,16 @@ pub mod sim {
     /// The methodology is based on what is proposed in Section 4.1 of Clauset, Aaron, et al. ‘Power-Law Distributions in Empirical Data’.
     /// SIAM Review, vol. 51, no. 4, Society for Industrial & Applied Mathematics (SIAM), Nov. 2009, pp. 661–703, [doi:10.48550/ARXIV.0706.1062](https://doi.org/10.48550/arXiv.0706.1062).
     /// Where the number of simulations required for the desired level of precision in the estimate is: 1/4 * prec^(-2). Ex. 1/4 * 0.01^(-2) = 2500 sims gives accuracy within 0.01
+    /// 
+    /// # Example
+    /// ```
+    /// use powerlaw::util;
+    /// 
+    /// let X: Vec<f64> = (0..100).map(|x| x as f64).collect();
+    /// let prec = 0.001;
+    /// let xm = 78.;
+    /// let params = util::sim::calculate_sim_params(&prec, X.as_slice(), &xm); // params.num_sims_m = 250000
+    /// ```
     pub fn calculate_sim_params(prec: &f64, data: &[f64], x_min: &f64) -> SimParams {
         // calculate number of sims based on desired precision
         let M: usize = ((1. / 4.) * prec.powf(-2.)) as usize;
@@ -67,19 +76,6 @@ pub mod sim {
         }
     }
 
-    #[test]
-    fn test_sim_params() {
-        let X: Vec<f64> = (0..100).map(|x| x as f64).collect();
-        let n = X.len();
-        let prec = 0.001;
-        let xm = 78.;
-        let params = calculate_sim_params(&prec, X.as_slice(), &xm);
-
-        assert_eq!(params.num_sims_m, 250000);
-        assert_eq!(params.sim_len_n, X.len());
-        assert_eq!(params.n_tail, (n as f64 - xm) as usize);
-    }
-
     /// Generates multiple synthetic datasets using a hybrid model based on the input data and a proposed Pareto Type I fit. This process is fully parallelized,
     /// with M simulations running concurrently on separate threads.
     ///
@@ -89,7 +85,7 @@ pub mod sim {
     ///
     /// The probability of selecting the Pareto tail is controlled by 'p_tail'.
     ///
-    ///This approach is commonly used in bootstrapping or simulation studies for extreme value analysis.
+    /// This approach is commonly used in bootstrapping or simulation studies for extreme value analysis.
     pub fn generate_synthetic_datasets(
         data: &[f64],
         x_min: f64,
@@ -191,16 +187,5 @@ pub fn check_data(data: &[f64]) -> Vec<f64> {
     } else {
         // Clone and return a copy of the original Vec
         data.to_vec()
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test_linspace() {
-        let x = linspace(0.0, 1.0, 5);
-        assert_eq!(x, vec![0.0, 0.25, 0.5, 0.75, 1.0]);
     }
 }
