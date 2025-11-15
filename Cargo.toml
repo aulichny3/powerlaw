@@ -1,6 +1,7 @@
 [package]
 name = "powerlaw"
-version = "0.0.11"
+version = "0.0.12"
+homepage = "https://github.com/aulichny3/powerlaw
 edition = "2021"
 license = "MIT OR Apache-2.0"
 authors = ["Adam Ulichny <aulichny@protonmail.com>"]
