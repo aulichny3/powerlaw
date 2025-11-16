@@ -15,7 +15,6 @@
 //! # Requirements
 //! One column of csv data if using from the command line (the file extension does not matter). Otherwise one ```Vec<f64>``` of the data if using the library functions. Other file formats/data types are not yet supported.
 //! # Usage
-
 //!
 //! The `powerlaw` CLI tool provides two main subcommands: `fit` and `test`.
 //!
@@ -60,11 +59,11 @@
 //! # Methodology
 //! The vast majority of this package is based on the procedure outlined in ‘Power-Law Distributions in Empirical Data’ by Clauset et al.
 //! # Limitations
-//! 1. Only the continuous case of the Pareto Type I Distribution is considered for parameter estimation, goodness of fit, and hypothesis testing at this time. This may or may not change with future updates. The example data in the documentation is discrete, thus the results are only an approximation.
-//! 2. Domain knowledge of the data generating process is critical given the methodology used by this package is based on that proposed by the referenced material.
-//! Specifically the 1 sample Kolmogorov-Smirnov test is used for goodness of fit testing which assumes i.i.d data. Many natural processes data are serially correlated, thus KS testing is not appropriate, see references section below.
-//! 3. This is highly alpha code; backwards compatibility is not guaranteed and should not be expected.
-//! 4. Many more known and unknown.
+//! 1.  Only the continuous case of the Pareto Type I Distribution is considered for parameter estimation, goodness of fit, and hypothesis testing at this time. This may or may not change with future updates. The example data in the documentation is discrete, thus the results are only an approximation.
+//! 2.  Domain knowledge of the data generating process is critical given the methodology used by this package is based on that proposed by the referenced material.
+//!     Specifically the 1 sample Kolmogorov-Smirnov test is used for goodness of fit testing which assumes i.i.d data. Many natural processes data are serially correlated, thus KS testing is not appropriate, see references section below.
+//! 3.  This is highly alpha code; backwards compatibility is not guaranteed and should not be expected.
+//! 4.  Many more known and unknown.
 //! # References
 //! Clauset, A., Shalizi, C. R., & Newman, M. E. J. (2009). Power-Law Distributions in Empirical Data. SIAM Review, 51(4), 661–703. [doi:10.1137/070710111](https://doi.org/10.1137/070710111)
 //!
@@ -72,9 +71,12 @@
 //!
 //! Zeimbekakis, A., Schifano, E. D., & Yan, J. (2024). On Misuses of the Kolmogorov-Smirnov Test for One-Sample Goodness-of-Fit. The American Statistician, 78(4), 481–487. [10.1080/00031305.2024.2356095](https://doi.org/10.1080/00031305.2024.2356095)
 
+/// Module for various probability distributions.
 pub mod dist;
+/// Module for statistical inference and descriptive statistics.
 pub mod stats;
+/// Module for helper functions, including data reading and simulation.
 pub mod util;
 
-// Re-export the trait
+/// A trait for probability distributions, providing a common interface for PDF, CDF, and random variate generation.
 pub use dist::Distribution;
