@@ -76,9 +76,9 @@ fn run_analysis(filepath: PathBuf, precision: Option<f64>) {
     let best_fit = dist::pareto::gof(&data, &alphas.0, &alphas.1);
     println!(
         "Pareto Type I parameters - alpha: {:?} x_min {:?} KS stat: {:?} tail length: {:?}",
-        best_fit.alpha, best_fit.x_min, best_fit.D, best_fit.len_tail
+        best_fit.alpha, best_fit.x_min, best_fit.d, best_fit.len_tail
     );
-    println!("Generic Power-Law [Cx^(-alpha)] parameters - alpha: {:?} x_min {:?} KS stat: {:?} tail length: {:?}", best_fit.alpha + 1. , best_fit.x_min, best_fit.D, best_fit.len_tail);
+    println!("Generic Power-Law [Cx^(-alpha)] parameters - alpha: {:?} x_min {:?} KS stat: {:?} tail length: {:?}", best_fit.alpha + 1. , best_fit.x_min, best_fit.d, best_fit.len_tail);
 
     if let Some(prec) = precision {
         //calculate uncertainly of the estimates by generating synthetic datasets and finding the best fit for them (Sec 3.4 Clauset et al.)
@@ -93,7 +93,7 @@ fn run_analysis(filepath: PathBuf, precision: Option<f64>) {
             "Testing the null hypothesis H0 that a Power-Law is a plausible fit to the data..."
         );
         let h_0 =
-            dist::pareto::hypothesis_test(data, prec, best_fit.alpha, best_fit.x_min, best_fit.D);
+            dist::pareto::hypothesis_test(data, prec, best_fit.alpha, best_fit.x_min, best_fit.d);
         println!(
             "Qty of simulations with KS statistic > empirical data = {:?}",
             h_0.gt

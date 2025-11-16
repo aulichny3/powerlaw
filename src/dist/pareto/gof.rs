@@ -14,33 +14,34 @@ use super::Pareto;
 use crate::stats;
 use rayon::prelude::*;
 
+/// Represents the best-fit parameters and goodness-of-fit statistic for a dataset.
 #[derive(Debug, Clone)]
 pub struct Fitment {
+    /// The `x_min` parameter that yields the best fit.
     pub x_min: f64,
+    /// The `alpha` parameter that yields the best fit.
     pub alpha: f64,
-    pub D: f64,
+    /// The Kolmogorov-Smirnov (KS) test statistic `d` for the best fit.
+    pub d: f64,
+    /// The number of elements in the tail of the distribution (`>= x_min`).
     pub len_tail: usize,
 }
 
-/// Goodness of fit testing via 1 sample KS test. The approach is to iterate over all specified x_min and alpha pairs to identify the set that has the smallest KS test statistic
-pub fn gof(data: &Vec<f64>, x_mins: &Vec<f64>, alphas: &Vec<f64>) -> Fitment {
-    /*
-    Parameters
-    ----------
-    x_min: &Vec<f64>
-        x_min of min values from the data
-    alpha: &Vec<f64>
-        vector of alpha parameters that correspond to each x_min
-    data: &Vec<f64>
-        Sample dataset to fit on.
-
-    Returns:
-    ----------
-    Struct of the x_min, alpha pair and corresponding KS test statistic that best fit the data.
-    */
-
+/// Performs a goodness-of-fit (GOF) test by iterating over all specified `x_min` and `alpha` pairs
+/// to identify the set that has the smallest Kolmogorov-Smirnov (KS) test statistic `D`.
+///
+/// # Parameters
+/// - `data`: A slice of `f64` values representing the sample dataset to fit.
+/// - `x_mins`: A slice of `f64` values representing the candidate `x_min` values.
+/// - `alphas`: A slice of `f64` values representing the candidate `alpha` values,
+///   corresponding to the `x_mins`.
+///
+/// # Returns
+/// A `Fitment` struct containing the `x_min`, `alpha`, `d` (KS statistic), and `len_tail`
+/// for the parameter pair that best fits the data (i.e., minimizes `d`).
+pub fn gof(data: &[f64], x_mins: &[f64], alphas: &[f64]) -> Fitment {
     // 1. Sort the data once. O(D log D).
-    let mut sorted_data_vec = data.clone();
+    let mut sorted_data_vec = data.to_vec();
     sorted_data_vec.sort_by(|a, b| a.partial_cmp(b).unwrap());
 
     // 2. Share the sorted data by reference for all parallel tasks.
@@ -59,24 +60,18 @@ pub fn gof(data: &Vec<f64>, x_mins: &Vec<f64>, alphas: &Vec<f64>) -> Fitment {
             let thread_data_slice = &current_data_slice[start_idx..];
 
             // 6. Perform the KS test.
-            let custom_cdf = |x: f64| {
-                Pareto {
-                    x_min: x_min,
-                    alpha: alpha,
-                }
-                .cdf(x)
-            };
+            let custom_cdf = |x: f64| Pareto { x_min, alpha }.cdf(x);
 
-            let ks_result = stats::ks::ks_1sam_sorted(&thread_data_slice, custom_cdf);
+            let ks_result = stats::ks::ks_1sam_sorted(thread_data_slice, custom_cdf);
 
             Fitment {
                 x_min,
                 alpha,
-                D: ks_result.2,
+                d: ks_result.2,
                 len_tail: thread_data_slice.len(),
             }
         })
-        .min_by(|a, b| a.D.partial_cmp(&b.D).unwrap()) // Find the best fit in parallel
+        .min_by(|a, b| a.d.partial_cmp(&b.d).unwrap()) // Find the best fit in parallel
         .unwrap(); // Unwrap is safe if x_mins/alphas are non-empty
 
     // The statistical error for the alpha parameter is reported in wikipedia as having this calculation based on:
