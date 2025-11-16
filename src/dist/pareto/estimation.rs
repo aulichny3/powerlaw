@@ -4,13 +4,25 @@
 // that can be found in the LICENSE-MIT or LICENSE-APACHE files
 // at the root of this source tree.
 
-//! Collection of functions in support of pareto type 1 parameter estimation.
+//! Collection of functions in support of Pareto Type I parameter estimation.
 
 use super::gof;
 use crate::stats;
 use rayon::prelude::*;
 
-/// MLE estimator for the Pareto Type I alpha parameter.
+/// Maximum Likelihood Estimator (MLE) for the Pareto Type I alpha parameter.
+///
+/// This function calculates `alpha_hat = n / sum(ln(x_i / x_min))` for `x_i >= x_min`.
+///
+/// # Parameters
+/// - `data`: A slice of `f64` values representing the dataset.
+/// - `x_min`: The minimum value of the distribution.
+/// - `sorted`: A boolean indicating whether the `data` slice is already sorted and filtered
+///   such that all elements are `>= x_min`. If `false`, the function will filter `data`
+///   internally.
+///
+/// # Returns
+/// The estimated alpha parameter as an `f64`. Returns `f64::NAN` if `n` (number of data points >= x_min) is zero.
 pub fn type1_alpha_hat(data: &[f64], x_min: f64, sorted: bool) -> f64 {
     // Shared calculation for both branches (using iteration)
     let (n, sum): (f64, f64) = match sorted {
@@ -39,39 +51,34 @@ pub fn type1_alpha_hat(data: &[f64], x_min: f64, sorted: bool) -> f64 {
     n / sum
 }
 
-/// Calculate the maximum likelihood estimate (MLE) for the Pareto Type I
-/// alpha parameter for a given x_min value in range of minimum values,
-/// where each x_min is taken from the input data.
+/// Calculates the maximum likelihood estimate (MLE) for the Pareto Type I
+/// alpha parameter for a given `x_min` value in a range of minimum values,
+/// where each `x_min` is taken from the input data.
+///
 /// This function is an O(N log N) optimization of the exhaustive search
 /// (which is O(N²)). The complexity comes from the initial sort (O(N log N))
 /// and the subsequent calculations (O(N)). It achieves this by pre-calculating
 /// a suffix sum of the logarithms of the data.
 ///
-/// The formula used is:
-/// alpha_hat = (N - i) / Sum [from j=i to N-1] of natural_log(data[j] / data[i])
-/// <div class="warning">Numerical Stability Warning</div>
+/// # Numerical Stability Warning
 /// Due to the nature of the optimization, the denominator sum is computed as the
 /// difference between two large, nearly equal numbers:
-/// (Sum [from j=i to N-1] of natural_log(data[j])) - ((N - i) * natural_log(data[i])).
+/// `(Sum [from j=i to N-1] of natural_log(data[j])) - ((N - i) * natural_log(data[i]))`.
 /// This structure introduces a minor risk of catastrophic cancellation in
 /// double-precision floating-point arithmetic (f64), potentially leading
-/// to a small loss of precision in the least significant digits. In testing
-/// stability has been held to approx 12 decimal points.
+/// to a small loss of precision in the least significant digits. In testing,
+/// stability has been held to approximately 12 decimal points.
+///
+/// # Parameters
+/// - `data`: A mutable slice of `f64` values representing the sample dataset.
+///   **The data will be sorted in place.**
+///
+/// # Returns
+/// A tuple of two `Vec<f64>`:
+/// - `(0)`: A `Vec<f64>` containing the `x_min` values used (which are `data[0]`
+///   through `data[N-2]` after sorting).
+/// - `(1)`: A `Vec<f64>` containing the corresponding MLE alpha estimates.
 pub fn find_alphas_fast(data: &mut [f64]) -> (Vec<f64>, Vec<f64>) {
-    /*
-    Parameters
-    ----------
-    data: &mut Vec<f64>
-        Sample dataset to fit on. **The data will be sorted in place.**
-
-    Returns:
-    ----------
-    Tuple of vectors:
-    * v.0: A `Vec<f64>` containing the x_min value used
-    (which are data[0] through data[N-2] after sorting).
-    * v.1: A `Vec<f64>` containing the corresponding MLE alpha estimates.
-    */
-
     // 1. Sort the data: O(N log N)
     data.sort_by(|a, b| a.partial_cmp(b).unwrap());
 
@@ -116,28 +123,26 @@ pub fn find_alphas_fast(data: &mut [f64]) -> (Vec<f64>, Vec<f64>) {
     (x_mins, alphas)
 }
 
-/// Generates *n* Pareto Type I alpha estimates for a given x_min from
+/// Generates `n` Pareto Type I alpha estimates for a given `x_min` from
 /// the data by repeatedly calling the Pareto Type I alpha MLE function over
-/// the dataset. Given it uses the sample data as x_min, it may not be
+/// the dataset. Given it uses the sample data as `x_min`, it may not be
 /// precise for small sample sizes.
 ///
-/// This function is slower than [find_alphas_fast] as it uses an iterative approach to calculate the MLE for each x_min
-/// by looping over the data. However, it may provide higher precision albeit with a performance penalty. It is *not* implemented in this binary, but is available through the public api.
+/// This function is slower than [find_alphas_fast] as it uses an iterative approach
+/// to calculate the MLE for each `x_min` by looping over the data. However, it may
+/// provide higher precision albeit with a performance penalty. It is *not*
+/// implemented in this binary, but is available through the public API.
+///
+/// # Parameters
+/// - `data`: A mutable slice of `f64` values representing the sample dataset.
+///   **The data will be sorted in place.**
+///
+/// # Returns
+/// A tuple of two `Vec<f64>`:
+/// - `(0)`: A `Vec<f64>` containing the `x_min` values used (which are `data[0]`
+///   through `data[N-2]` after sorting).
+/// - `(1)`: A `Vec<f64>` containing the corresponding MLE alpha estimates.
 pub fn find_alphas_exhaustive(data: &mut [f64]) -> (Vec<f64>, Vec<f64>) {
-    /*
-    Parameters
-    ----------
-    data: &mut Vec<f64>
-        Sample dataset to fit on. **The data will be sorted in place.**
-
-    Returns:
-    ----------
-    Tuple of vectors:
-    * v.0: A `Vec<f64>` containing the x_min values used
-    (which are data[0] through data[N-2] after sorting).
-    * v.1: A `Vec<f64>` containing the corresponding MLE alpha estimates.
-    */
-
     //sort in place to avoid cloning - what if we didn't sort? then we don't need the mutable reference
     data.sort_by(|a, b| a.partial_cmp(b).unwrap());
 
@@ -157,18 +162,29 @@ pub fn find_alphas_exhaustive(data: &mut [f64]) -> (Vec<f64>, Vec<f64>) {
     (data[..data.len() - 1].to_vec(), alphas)
 }
 
-/// x_min and alpha uncertainty estimates based on synthetic data via uniform
-/// sampling with replacement. The purpose of this function is to find the
-/// standard deviation around the estimated alpha and x_min parameters. This is done by
-/// generating M synthetic datasets and then fitting their own best fit Pareto Type I
-/// distributions on them. Each resulting alpha and x_min has its sample
-/// standard deviation calculated and returned.
-/// This is the procedure proposed in Section 3.3 of
-/// Clauset, Aaron and Shalizi, Cosma Rohilla and Newman, M. E. J. [doi:10.48550/ARXIV.0706.1062](https://doi.org/10.48550/arXiv.0706.1062)
-pub fn param_est(data: &[f64], M: usize) -> (f64, f64) {
+/// Estimates the uncertainty (standard deviation) of the `x_min` and `alpha` parameters
+/// using a bootstrapping approach with synthetic datasets.
+///
+/// This function generates `m_simulations` synthetic datasets by uniformly sampling with replacement
+/// from the original `data`. For each synthetic dataset, it fits a Pareto Type I
+/// distribution to find its best-fit `x_min` and `alpha`. The standard deviations
+/// of these `m_simulations` estimated `x_min` and `alpha` values are then returned as the uncertainty estimates.
+///
+/// This procedure is proposed in Section 3.3 of Clauset, Aaron, et al.
+/// [doi:10.48550/ARXIV.0706.1062](https://doi.org/10.48550/arXiv.0706.1062).
+///
+/// # Parameters
+/// - `data`: A slice of `f64` values representing the observed dataset.
+/// - `m_simulations`: The number of synthetic datasets to generate for bootstrapping.
+///
+/// # Returns
+/// A tuple `(x_min_std_dev, alpha_std_dev)` where:
+/// - `x_min_std_dev`: The standard deviation of the estimated `x_min` values from the simulations.
+/// - `alpha_std_dev`: The standard deviation of the estimated `alpha` values from the simulations.
+pub fn param_est(data: &[f64], m_simulations: usize) -> (f64, f64) {
     // This function is slow and there has to be a more efficient way of calculating parameter uncertainty.
     let n: usize = data.len();
-    let results: Vec<(f64, f64)> = (0..M)
+    let results: Vec<(f64, f64)> = (0..m_simulations)
         .into_par_iter()
         .map(|_| {
             let mut sample = stats::random::random_choice(data, n);
@@ -187,17 +203,33 @@ pub fn param_est(data: &[f64], M: usize) -> (f64, f64) {
     (x_min_est, alpha_est)
 }
 
-/// Log Likelihood for a given alpha/x_min
+/// Represents the log-likelihood of Pareto Type I parameters given a dataset.
 #[derive(Debug, Clone)]
 pub struct Loglikelihood {
+    /// The minimum value of the distribution (x_min).
     pub x_min: f64,
+    /// The scaling parameter (alpha) of the distribution.
     pub alpha: f64,
+    /// The calculated log-likelihood value.
     pub ll: f64,
 }
 
-/// Calculates the log likelihood L(theta|x) of the parameters given the data.
-/// This function is not used anywhere yet, but is a backlog item.
-pub fn likelihood(data: &mut [f64], x_mins: &Vec<f64>, alphas: &Vec<f64>) -> Loglikelihood {
+/// Calculates the log-likelihood `L(theta|x)` of the parameters (`alpha`, `x_min`) given the data.
+///
+/// This function is currently not used within the main binary, but is available through the public API.
+/// It iterates through potential `x_min` and `alpha` pairs and calculates the log-likelihood for each.
+///
+/// # Parameters
+/// - `data`: A mutable slice of `f64` values representing the observed dataset.
+///   **The data will be sorted in place.**
+/// - `x_mins`: A slice of `f64` values representing the candidate `x_min` values.
+/// - `alphas`: A slice of `f64` values representing the candidate `alpha` values,
+///   corresponding to the `x_mins`.
+///
+/// # Returns
+/// A `Loglikelihood` struct containing the `x_min`, `alpha`, and `ll` (log-likelihood)
+/// for the parameter pair that yielded the maximum log-likelihood.
+pub fn likelihood(data: &mut [f64], x_mins: &[f64], alphas: &[f64]) -> Loglikelihood {
     let mut best_ll_result = Loglikelihood {
         x_min: 0.0,
         alpha: 0.0,
