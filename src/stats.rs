@@ -6,9 +6,16 @@
 
 //! Module to aid in statistical inference. Contains functions for basic descriptive statistics, non parametric methods for comparing distributions etc.
 
-/// A collection of descriptive statistics, mean, variance etc.
+/// A collection of descriptive statistics, such as mean, variance, etc.
 pub mod descriptive {
     /// Calculates the arithmetic mean of a vector.
+    ///
+    /// # Parameters
+    /// - `data`: The input slice of `f64` values.
+    ///
+    /// # Returns
+    /// The arithmetic mean as an `f64`.
+    ///
     /// # Example
     /// ```
     /// use powerlaw::stats;
@@ -22,7 +29,16 @@ pub mod descriptive {
         sum / data.len() as f64
     }
 
-    /// Calculates the variance of a vector where ddof = degrees of freedom. If ddof=1, the sample variance is returned otherwise the population variance is returned.
+    /// Calculates the variance of a vector where `ddof` (degrees of freedom) determines
+    /// whether the sample variance (`ddof=1`) or population variance (`ddof=0`) is returned.
+    ///
+    /// # Parameters
+    /// - `data`: The input slice of `f64` values.
+    /// - `ddof`: Degrees of freedom. Use `1` for sample variance, `0` for population variance.
+    ///
+    /// # Returns
+    /// The calculated variance as an `f64`.
+    ///
     /// # Example
     /// ```
     /// use powerlaw::stats;
@@ -47,11 +63,19 @@ pub mod descriptive {
     }
 }
 
-/// Functions in support of randomization.
+/// Functions in support of randomization, including sampling and random variate generation.
 pub mod random {
     use rand::prelude::*;
 
-    /// Sample *n* elements with probability U(0,1) with replacement.
+    /// Sample `n` elements with replacement from the input `data`.
+    ///
+    /// # Parameters
+    /// - `data`: The input slice of `f64` values to sample from.
+    /// - `size`: The number of elements to sample.
+    ///
+    /// # Returns
+    /// A new `Vec<f64>` containing the sampled elements.
+    ///
     /// # Example
     /// ```
     /// use powerlaw::stats;
@@ -75,7 +99,13 @@ pub mod random {
         samp
     }
 
-    /// Generate *n* random variates from U(0,1).
+    /// Generate `n` random variates from a Uniform(0,1) distribution.
+    ///
+    /// # Parameters
+    /// - `n`: The number of random variates to generate.
+    ///
+    /// # Returns
+    /// A `Vec<f64>` containing `n` random numbers between 0.0 (inclusive) and 1.0 (exclusive).
     pub fn random_uniform(n: usize) -> Vec<f64> {
         let mut rng = rand::rng();
 
@@ -85,10 +115,22 @@ pub mod random {
 }
 
 /// Supporting functions for Kolmogorov–Smirnov testing for similarity between empirical and reference cumulative distribution functions.
-/// Given this function is called iteratively over the data during the goodness of fit portion in [crate::dist::pareto::gof()], it requires the observed data to be sorted.
+///
+/// Given this function is called iteratively over the data during the goodness of fit portion in [crate::dist::pareto::gof()],
+/// it requires the observed data to be sorted.
 pub mod ks {
     use crate::dist::Distribution;
     /// 1 sample KS test based on a known cdf. This function requires a generic cdf closure/function such as what is defined in the [Distribution] trait.
+    ///
+    /// # Parameters
+    /// - `sorted_x`: The input slice of `f64` values, which must be sorted in ascending order.
+    /// - `cdf_func`: A closure or function that computes the theoretical CDF value for a given `f64`.
+    ///
+    /// # Returns
+    /// A tuple `(D_plus, D_minus, D)` where:
+    /// - `D_plus`: The D+ statistic.
+    /// - `D_minus`: The D- statistic.
+    /// - `D`: The overall Kolmogorov-Smirnov statistic, which is `max(D_plus, D_minus)`.
     pub fn ks_1sam_sorted<F>(sorted_x: &[f64], cdf_func: F) -> (f64, f64, f64)
     where
         F: Fn(f64) -> f64, // 'F' is a generic type that must be a closure/function
@@ -112,19 +154,31 @@ pub mod ks {
         (dplus, dminus, d)
     }
 
-    /// The D+ statistic measures the largest amount by which the ECDF is above the theoretical CDF.
+    /// The D+ statistic measures the largest amount by which the Empirical Cumulative Distribution Function (ECDF)
+    /// is above the theoretical Cumulative Distribution Function (CDF).
+    ///
+    /// # Parameters
+    /// - `cdfvals`: A slice of theoretical CDF values corresponding to the sorted data points.
+    /// - `n`: The number of data points.
+    ///
+    /// # Returns
+    /// The D+ statistic as an `f64`.
     fn compute_dplus(cdfvals: &[f64], n: usize) -> f64 {
         (1..=n)
             .map(|i| i as f64 / n as f64 - cdfvals[i - 1])
             .fold(f64::MIN, f64::max)
     }
 
-    /// The D- statistic measures the largest amount by which the ECDF is below the theoretical CDF.
+    /// The D- statistic measures the largest amount by which the theoretical Cumulative Distribution Function (CDF)
+    /// is above the Empirical Cumulative Distribution Function (ECDF).
+    ///
+    /// # Parameters
+    /// - `cdfvals`: A slice of theoretical CDF values corresponding to the sorted data points.
+    /// - `n`: The number of data points.
+    ///
+    /// # Returns
+    /// The D- statistic as an `f64`.
     fn compute_dminus(cdfvals: &[f64], n: usize) -> f64 {
-        /*
-        Computes D- as used in the Kolmogorov-Smirnov test.
-        ...
-        */
         (0..n)
             .map(|i| cdfvals[i] - i as f64 / n as f64)
             .fold(f64::MIN, f64::max)
