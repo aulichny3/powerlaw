@@ -4,8 +4,11 @@
 // that can be found in the LICENSE-MIT or LICENSE-APACHE files
 // at the root of this source tree.
 
+/// Contains the exponential distribution implementation.
 pub mod exponential;
+/// Contains the Pareto Type I distribution implementation and analysis functions.
 pub mod pareto;
+/// Contains the generic power-law distribution implementation.
 pub mod powerlaw;
 
 pub trait Distribution {
