@@ -8,7 +8,13 @@
 
 use csv::ReaderBuilder;
 use std::error::Error;
+
 /// Returns *n* quantity of evenly spaced numbers over a specified interval. Motivated by numpy's [linspace](https://numpy.org/doc/stable/reference/generated/numpy.linspace.html).
+///
+/// # Parameters
+/// - `start`: The starting value of the sequence.
+/// - `end`: The ending value of the sequence.
+/// - `n`: The number of samples to generate.
 ///
 /// # Example
 /// ```
@@ -16,14 +22,13 @@ use std::error::Error;
 ///
 /// let numbers:Vec<f64> = util::linspace(0.,1., 5); // results in [0.0, 0.25, 0.5, 0.75, 1.0]
 /// ```
-
 pub fn linspace(start: f64, end: f64, n: usize) -> Vec<f64> {
     (0..n)
         .map(|i| start + i as f64 * (end - start) / (n - 1) as f64)
         .collect()
 }
 
-/// Module for handling simulation related tasks such as identifying recommended parameters and generating synthetic datasets.
+/// Functions for handling simulation related tasks such as identifying recommended parameters and generating synthetic datasets.
 pub mod sim {
     use crate::dist::pareto::Pareto;
     use crate::dist::Distribution;
@@ -45,19 +50,19 @@ pub mod sim {
     /// The methodology is based on what is proposed in Section 4.1 of Clauset, Aaron, et al. ‘Power-Law Distributions in Empirical Data’.
     /// SIAM Review, vol. 51, no. 4, Society for Industrial & Applied Mathematics (SIAM), Nov. 2009, pp. 661–703, [doi:10.48550/ARXIV.0706.1062](https://doi.org/10.48550/arXiv.0706.1062).
     /// Where the number of simulations required for the desired level of precision in the estimate is: 1/4 * prec^(-2). Ex. 1/4 * 0.01^(-2) = 2500 sims gives accuracy within 0.01
-    /// 
+    ///
     /// # Example
     /// ```
     /// use powerlaw::util;
-    /// 
+    ///
     /// let X: Vec<f64> = (0..100).map(|x| x as f64).collect();
-    /// let prec = 0.001;
+    /// let prec = 0.01;
     /// let xm = 78.;
-    /// let params = util::sim::calculate_sim_params(&prec, X.as_slice(), &xm); // params.num_sims_m = 250000
+    /// let params = util::sim::calculate_sim_params(&prec, X.as_slice(), &xm); // params.num_sims_m = 2500
     /// ```
     pub fn calculate_sim_params(prec: &f64, data: &[f64], x_min: &f64) -> SimParams {
         // calculate number of sims based on desired precision
-        let M: usize = ((1. / 4.) * prec.powf(-2.)) as usize;
+        let M: usize = ((1. / 4.) * prec.powf(-2.)).round() as usize;
 
         // sample size per sim exhaustive
         let n: &usize = &data.len();
@@ -83,7 +88,7 @@ pub mod sim {
     /// 1. Sampling from the 'lower' part of the original data (where x < x_min).
     /// 2. Sampling from a Pareto Type I distribution (defined by x_min and alpha).
     ///
-    /// The probability of selecting the Pareto tail is controlled by 'p_tail'.
+    /// The probability of selecting from the Pareto tail is controlled by `p_tail`.
     ///
     /// This approach is commonly used in bootstrapping or simulation studies for extreme value analysis.
     pub fn generate_synthetic_datasets(
@@ -162,7 +167,14 @@ pub mod sim {
     }
 }
 
-/// Helper function to read csv files.
+/// Reads a single-column CSV file into a vector of `f64`.
+///
+/// This function assumes the CSV has no headers. It will skip any rows
+/// that cannot be parsed into an `f64`.
+///
+/// # Errors
+///
+/// Returns an error if the file cannot be opened or read.
 pub fn read_csv(file_path: &str) -> Result<Vec<f64>, Box<dyn Error>> {
     let mut rdr = ReaderBuilder::new()
         .has_headers(false)
@@ -177,7 +189,12 @@ pub fn read_csv(file_path: &str) -> Result<Vec<f64>, Box<dyn Error>> {
     Ok(data)
 }
 
-/// Checks if a slice contains non-positive values (<= 0.0 or NaN).
+/// Filters a slice to ensure all values are positive.
+///
+/// This function checks for non-positive values (`<= 0.0`) or `NaN`. If such
+/// values are found, it prints a warning to `stderr` and returns a new `Vec<f64>`
+/// containing only the positive values. Otherwise, it returns a clone of the
+/// original slice.
 pub fn check_data(data: &[f64]) -> Vec<f64> {
     if data.iter().any(|&x| !(x > 0.0)) {
         eprintln!("Warning: Data contains non-positive values or NaN. Filtering applied.");
