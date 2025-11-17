@@ -79,3 +79,19 @@ impl Distribution for Exponential {
         -u.ln() / self.lambda
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::dist::Distribution;
+
+    #[test]
+    fn random_variate() {
+        let expo = Exponential { lambda: 4.0 };
+
+        // X = x
+        let x: f64 = expo.rv(0.2);
+
+        assert_eq!(x, 0.40235947810852507);
+    }
+}

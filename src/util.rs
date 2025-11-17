@@ -284,4 +284,32 @@ mod tests {
         assert!((erf(-5.0) - (-1.0)).abs() < 1e-5);
         assert!((erf(-10.0) - (-1.0)).abs() < 1e-5);
     }
+
+    #[test]
+    fn test_linspace() {
+        let x = linspace(0.0, 1.0, 5);
+        assert_eq!(x, vec![0.0, 0.25, 0.5, 0.75, 1.0]);
+    }
+
+    #[test]
+    fn test_sim_params() {
+        let x: Vec<f64> = (0..100).map(|i| i as f64).collect();
+        let prec = 0.001;
+        let xm = 78.;
+        let params = sim::calculate_sim_params(&prec, x.as_slice(), &xm);
+
+        assert_eq!(params.num_sims_m, 250000);
+        assert_eq!(params.sim_len_n, x.len());
+        assert_eq!(params.n_tail, (x.len() as f64 - xm) as usize);
+    }
+
+    #[test]
+    fn test_check_data() {
+        let mut x = vec![1.0, 2.0, 3.0, 4.0, 5.0];
+        x.push(-1.0);
+        x.push(0.0);
+
+        let z = check_data(&x);
+        assert_eq!(z, vec![1.0, 2.0, 3.0, 4.0, 5.0]);
+    }
 }
