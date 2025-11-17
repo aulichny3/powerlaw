@@ -68,3 +68,14 @@ impl Pareto {
         Pareto { alpha, x_min }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    #[should_panic]
+    fn pareto_params() {
+        let _invalid = Pareto::new(-1., -1.);
+    }
+}
