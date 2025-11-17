@@ -206,3 +206,82 @@ pub fn check_data(data: &[f64]) -> Vec<f64> {
         data.to_vec()
     }
 }
+
+/// Computes the error function (erf) for a given `f64` value.
+///
+/// This implementation uses the Hastings' approximation (specifically, formula 7.1.26 from Abramowitz and Stegun's Handbook of Mathematical Functions), 
+/// which is accurate to about 1 part in 10^7.
+/// See: <https://www.johndcook.com/blog/2009/01/19/stand-alone-error-function-erf/>
+///
+/// The error function is defined as:
+/// erf(x) = (2/√π) ∫[0 to x] e^(-t²) dt
+///
+/// Due to its odd symmetry, erf(-x) = -erf(x), the approximation is applied
+/// to the absolute value of x, and the sign is then reapplied.
+pub fn erf(x: f64) -> f64 {
+    if x == 0.0 {
+        return 0.0;
+    }
+    // Coefficients for Hastings' approximation
+    let p: f64 = 0.3275911;
+    let a1: f64 = 0.254829592;
+    let a2: f64 = -0.284496736;
+    let a3: f64 = 1.421413741;
+    let a4: f64 = -1.453152027;
+    let a5: f64 = 1.061405429;
+
+    // Handle negative input using the odd function property: erf(-x) = -erf(x)
+    let sign = x.signum();
+    let abs_x = x.abs();
+
+    // Calculate T
+    let t = 1.0 / (1.0 + p * abs_x);
+
+    // Calculate the polynomial part
+    let poly = a1 * t + a2 * t.powi(2) + a3 * t.powi(3) + a4 * t.powi(4) + a5 * t.powi(5);
+
+    // Calculate erf(abs_x)
+    let result_abs = 1.0 - poly * (-abs_x * abs_x).exp();
+
+    // Apply the original sign
+    sign * result_abs
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_erf_zero() {
+        assert_eq!(erf(0.0), 0.0);
+    }
+
+    #[test]
+    fn test_erf_positive() {
+        // Known values for erf(x)
+        // erf(1.0) approx 0.8427007929
+        // erf(0.5) approx 0.5204998778
+        // erf(2.0) approx 0.9953227189
+        assert!((erf(1.0) - 0.8427007929).abs() < 1e-5);
+        assert!((erf(0.5) - 0.5204998778).abs() < 1e-5);
+        assert!((erf(2.0) - 0.9953227189).abs() < 1e-5);
+    }
+
+    #[test]
+    fn test_erf_negative() {
+        // erf(-x) = -erf(x)
+        assert!((erf(-1.0) - (-0.8427007929)).abs() < 1e-5);
+        assert!((erf(-0.5) - (-0.5204998778)).abs() < 1e-5);
+        assert!((erf(-2.0) - (-0.9953227189)).abs() < 1e-5);
+    }
+
+    #[test]
+    fn test_erf_large_values() {
+        // erf(x) approaches 1 for large positive x
+        assert!((erf(5.0) - 1.0).abs() < 1e-5);
+        assert!((erf(10.0) - 1.0).abs() < 1e-5);
+        // erf(x) approaches -1 for large negative x
+        assert!((erf(-5.0) - (-1.0)).abs() < 1e-5);
+        assert!((erf(-10.0) - (-1.0)).abs() < 1e-5);
+    }
+}
