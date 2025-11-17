@@ -209,8 +209,9 @@ pub fn check_data(data: &[f64]) -> Vec<f64> {
 
 /// Computes the error function (erf) for a given `f64` value.
 ///
-/// This implementation uses the Hastings' approximation, which is accurate
-/// to about 1 part in 10^7.
+/// This implementation uses the Hastings' approximation (specifically, formula 7.1.26 from Abramowitz and Stegun's Handbook of Mathematical Functions), 
+/// which is accurate to about 1 part in 10^7.
+/// See: <https://www.johndcook.com/blog/2009/01/19/stand-alone-error-function-erf/>
 ///
 /// The error function is defined as:
 /// erf(x) = (2/√π) ∫[0 to x] e^(-t²) dt
