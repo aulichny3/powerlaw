@@ -10,6 +10,8 @@ pub mod exponential;
 pub mod pareto;
 /// Contains the generic power-law distribution implementation.
 pub mod powerlaw;
+/// Contains the log-normal distribution implementation.
+pub mod lognormal;
 
 pub trait Distribution {
     /// Probability density function (PDF) at a given point x.
