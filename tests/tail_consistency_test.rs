@@ -2,7 +2,7 @@ use powerlaw::dist::{exponential, pareto, Distribution};
 use powerlaw::util::sim;
 
 #[test]
-fn compare_tailsizes() {
+fn test_tail_size_consistency_between_gof_and_sim() {
     //let mut X: Vec<f64> = (0..100).map(|x| x as f64).collect();
     let mut X = vec![
         0.2574, 0.0197, 0.9573, 0.0868, 0.8581, 0.135, 0.4982, 2.0102, 1.2629, 2.2725,
