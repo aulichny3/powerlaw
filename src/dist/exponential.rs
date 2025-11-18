@@ -78,6 +78,11 @@ impl Distribution for Exponential {
     fn rv(&self, u: f64) -> f64 {
         -u.ln() / self.lambda
     }
+
+    /// Calculates the log-likelihood of the data given the distribution.
+    fn loglikelihood(&self, x: &[f64]) -> Vec<f64> {
+        x.iter().map(|&x| self.pdf(x).ln()).collect()
+    }
 }
 
 #[cfg(test)]
@@ -93,5 +98,22 @@ mod tests {
         let x: f64 = expo.rv(0.2);
 
         assert_eq!(x, 0.40235947810852507);
+    }
+
+    #[test]
+    fn loglikelihood() {
+        let expo = Exponential { lambda: 4.0 };
+        let data = vec![0.1, 0.2, 0.3, 0.4, 0.5];
+        let ll = expo.loglikelihood(&data);
+        let expected = vec![
+            0.9862943611198906,
+            0.5862943611198906,
+            0.1862943611198906,
+            -0.2137056388801094,
+            -0.6137056388801094,
+        ];
+        for (a, b) in ll.iter().zip(expected.iter()) {
+            assert!((a - b).abs() < 1e-9);
+        }
     }
 }
