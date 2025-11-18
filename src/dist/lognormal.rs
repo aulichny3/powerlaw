@@ -7,8 +7,8 @@
 //! Lognormal distribution parameterized by the mean (mu) and standard deviation (sigma)
 //! of the variable's natural logarithm.
 
-use crate::util::erf;
 use super::Distribution;
+use crate::util::erf;
 use rand::Rng;
 
 /// Represents a Lognormal distribution.
@@ -78,6 +78,11 @@ impl Distribution for Lognormal {
         // Transform the standard normal variate to a log-normal variate
         (self.mu + self.sigma * z).exp()
     }
+
+    /// Calculates the log-likelihood of the data given the distribution.
+    fn loglikelihood(&self, x: &[f64]) -> Vec<f64> {
+        x.iter().map(|&x| self.pdf(x).ln()).collect()
+    }
 }
 
 impl Lognormal {
@@ -97,8 +102,8 @@ impl Lognormal {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use std::f64;
     use rand::Rng;
+    use std::f64;
 
     #[test]
     fn test_lognormal_pdf() {
@@ -146,5 +151,22 @@ mod tests {
     #[should_panic]
     fn test_new_invalid_sigma() {
         Lognormal::new(0.0, -1.0);
+    }
+
+    #[test]
+    fn loglikelihood() {
+        let dist = Lognormal::new(0.0, 1.0);
+        let data = vec![1.0, 2.0, 3.0, 4.0, 5.0];
+        let ll = dist.loglikelihood(&data);
+        let expected = vec![
+            -0.9189385332046727,
+            -1.8523122207237188,
+            -2.6210253022790733,
+            -3.266138922160966,
+            -3.8235216426288905,
+        ];
+        for (a, b) in ll.iter().zip(expected.iter()) {
+            assert!((a - b).abs() < 1e-6);
+        }
     }
 }

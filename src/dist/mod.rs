@@ -6,12 +6,12 @@
 
 /// Contains the exponential distribution implementation.
 pub mod exponential;
+/// Contains the log-normal distribution implementation.
+pub mod lognormal;
 /// Contains the Pareto Type I distribution implementation and analysis functions.
 pub mod pareto;
 /// Contains the generic power-law distribution implementation.
 pub mod powerlaw;
-/// Contains the log-normal distribution implementation.
-pub mod lognormal;
 
 pub trait Distribution {
     /// Probability density function (PDF) at a given point x.
@@ -31,4 +31,9 @@ pub trait Distribution {
 
     /// Random variate generator for the distribution where parameter u is u(0,1).
     fn rv(&self, u: f64) -> f64;
+
+    /// Calculates the log-likelihood of the data given the distribution.
+    ///
+    /// This trait  intentionally leaves out summing the vector of likelihoods for optional use in Vuongs closeness test see https://en.wikipedia.org/wiki/Vuong%27s_closeness_test
+    fn loglikelihood(&self, x: &[f64]) -> Vec<f64>;
 }

@@ -73,6 +73,11 @@ impl Distribution for Powerlaw {
     fn rv(&self, u: f64) -> f64 {
         self.x_min * (1. - u).powf(-1. / (self.alpha - 1.))
     }
+
+    /// Calculates the log-likelihood of the data given the distribution.
+    fn loglikelihood(&self, x: &[f64]) -> Vec<f64> {
+        x.iter().map(|&x| self.pdf(x).ln()).collect()
+    }
 }
 
 /// Calculates the Maximum Likelihood Estimate (MLE) for the alpha parameter of a power-law distribution.
@@ -90,4 +95,30 @@ pub fn alpha_hat(data: &[f64], x_min: f64) -> f64 {
     let sum_of_logs: f64 = logs.sum();
 
     1. + n as f64 / sum_of_logs
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::dist::Distribution;
+
+    #[test]
+    fn loglikelihood() {
+        let pl = Powerlaw {
+            alpha: 2.5,
+            x_min: 1.0,
+        };
+        let data = vec![1.0, 2.0, 3.0, 4.0, 5.0];
+        let ll = pl.loglikelihood(&data);
+        let expected = vec![
+            0.4054651081081644,
+            -1.327402843274342,
+            -2.341065613606193,
+            -3.060270794686873,
+            -3.618129673005666,
+        ];
+        for (a, b) in ll.iter().zip(expected.iter()) {
+            assert!((a - b).abs() < 1e-9);
+        }
+    }
 }
