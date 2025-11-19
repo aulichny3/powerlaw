@@ -109,7 +109,7 @@ You can also use `powerlaw` as a library in your own Rust projects.
 
 ```toml
 [dependencies]
-powerlaw = "0.0.3" # Or the version you need
+powerlaw = "0.0.16" # Or the version you need
 ```
 
 **2. Example:**
