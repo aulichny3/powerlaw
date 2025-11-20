@@ -60,8 +60,8 @@ impl Distribution for Pareto {
     }
 
     /// Calculates the log-likelihood of the data given the distribution.
-    fn loglikelihood(&self, x: &[f64]) -> Vec<f64> {
-        x.iter().map(|&x| self.pdf(x).ln()).collect()
+    fn loglikelihood(&self, data: &[f64]) -> Vec<f64> {
+        data.iter().map(|&x| self.pdf(x).ln()).collect()
     }
 }
 
