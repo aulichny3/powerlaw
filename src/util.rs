@@ -93,9 +93,9 @@ pub mod sim {
     /// This approach is commonly used in bootstrapping or simulation studies for extreme value analysis.
     pub fn generate_synthetic_datasets(
         data: &[f64],
+        alpha: f64,
         x_min: f64,
         sim_params: SimParams,
-        alpha: f64,
     ) -> Vec<Vec<f64>> {
         // create a vector of all the data < the tail
         let lower: Vec<f64> = data.iter().filter(|&&x| x < x_min).copied().collect();
