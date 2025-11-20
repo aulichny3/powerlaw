@@ -1,23 +1,28 @@
+pub mod estimation;
+pub use self::estimation::lambda_hat;
+
 // Copyright (c) 2025 Adam Ulichny
 //
 // This source code is licensed under the MIT OR Apache-2.0 license
 // that can be found in the LICENSE-MIT or LICENSE-APACHE files
 // at the root of this source tree.
 
-//! Exponential distribution parameterized by its lambda parameter.
-
+/// Exponential distribution parameterized by its lambda parameter.
 use super::Distribution;
 
 /// Represents an Exponential distribution.
 ///
-/// The Exponential distribution is a continuous probability distribution that describes
+/// The Shifted Exponential distribution is a continuous probability distribution that describes
 /// the time between events in a Poisson point process, i.e., a process in which events
-/// occur continuously and independently at a constant average rate.
+/// occur continuously and independently at a constant average rate. This implementation
+/// allows for shifting the distribution s.t Pr(X=x) s.t x_min <= x
 ///
 /// # Fields
 /// - `lambda`: The rate parameter (λ) of the distribution. Must be positive.
+/// - `x_min`: The minimum value of the distribution (x_m). Must be positive.
 pub struct Exponential {
     pub lambda: f64,
+    pub x_min: f64,
 }
 
 /// Implements the `Distribution` trait for the `Exponential` distribution.
@@ -25,7 +30,7 @@ impl Distribution for Exponential {
     /// Calculates the probability density function (PDF) at a given point `x`.
     ///
     /// The PDF for an Exponential distribution is given by:
-    /// f(x; λ) = λ * e^(-λx) for x >= 0, and 0 otherwise.
+    /// f(x; λ, x_min) = λ * e^(-λ * (x-x_min) for x >= 0, and 0 otherwise.
     ///
     /// # Parameters
     /// - `x`: The point at which to evaluate the PDF.
@@ -33,13 +38,13 @@ impl Distribution for Exponential {
     /// # Returns
     /// The PDF value at `x`.
     fn pdf(&self, x: f64) -> f64 {
-        self.lambda * std::f64::consts::E.powf(-self.lambda * x)
+        self.lambda * std::f64::consts::E.powf(-self.lambda * (x - self.x_min))
     }
 
     /// Calculates the cumulative distribution function (CDF) value at a given point `x`.
     ///
     /// The CDF for an Exponential distribution is given by:
-    /// F(x; λ) = 1 - e^(-λx) for x >= 0, and 0 otherwise.
+    /// F(x; λ, x_min) = 1 - e^(-λ * (x-x_min)) for x >= 0, and 0 otherwise.
     ///
     /// # Parameters
     /// - `x`: The point at which to evaluate the CDF.
@@ -47,14 +52,14 @@ impl Distribution for Exponential {
     /// # Returns
     /// The CDF value at `x`.
     fn cdf(&self, x: f64) -> f64 {
-        1. - std::f64::consts::E.powf(-self.lambda * x)
+        1. - std::f64::consts::E.powf(-self.lambda * (x - self.x_min))
     }
 
     /// Calculates the complementary cumulative distribution function (CCDF)
     /// (also known as the survival function) value at a given point `x`.
     ///
     /// The CCDF for an Exponential distribution is given by:
-    /// P(X > x; λ) = e^(-λx) for x >= 0, and 1 otherwise.
+    /// P(X > x; λ, x_min) = e^(-λ (x-x_min)) for x >= 0, and 1 otherwise.
     ///
     /// # Parameters
     /// - `x`: The point at which to evaluate the CCDF.
@@ -76,7 +81,7 @@ impl Distribution for Exponential {
     /// # Returns
     /// A random variate `x` from the Exponential distribution.
     fn rv(&self, u: f64) -> f64 {
-        -u.ln() / self.lambda
+        self.x_min - (1. / self.lambda) * u.ln() // technically 1-U which is equivalent to U in this context.
     }
 
     /// Calculates the log-likelihood of the data given the distribution.
@@ -92,28 +97,68 @@ mod tests {
 
     #[test]
     fn random_variate() {
-        let expo = Exponential { lambda: 4.0 };
+        let expo = Exponential {
+            lambda: 68.0,
+            x_min: 0.0282,
+        };
 
         // X = x
         let x: f64 = expo.rv(0.2);
 
-        assert_eq!(x, 0.40235947810852507);
+        assert_eq!(x, 0.05186820459461912);
     }
 
     #[test]
     fn loglikelihood() {
-        let expo = Exponential { lambda: 4.0 };
-        let data = vec![0.1, 0.2, 0.3, 0.4, 0.5];
+        let expo = Exponential {
+            lambda: 68.0,
+            x_min: 0.0282,
+        };
+        let data = vec![0.03, 0.05, 0.1, 0.15, 0.2];
         let ll = expo.loglikelihood(&data);
         let expected = vec![
-            0.9862943611198906,
-            0.5862943611198906,
-            0.1862943611198906,
-            -0.2137056388801094,
-            -0.6137056388801094,
+            4.097107705176107,
+            2.737107705176107,
+            -0.6628922948238936,
+            -4.062892294823892,
+            -7.462892294823894,
         ];
+        dbg!(&ll);
         for (a, b) in ll.iter().zip(expected.iter()) {
             assert!((a - b).abs() < 1e-9);
         }
+    }
+
+    #[test]
+    fn pdf() {
+        let expo = Exponential {
+            lambda: 2.5,
+            x_min: 1.0,
+        };
+        let x = 2.0;
+        let p = expo.pdf(x);
+        assert!((p - 0.20521249655).abs() < 1e-9);
+    }
+
+    #[test]
+    fn cdf() {
+        let expo = Exponential {
+            lambda: 2.5,
+            x_min: 1.0,
+        };
+        let x = 2.0;
+        let c = expo.cdf(x);
+        assert!((c - 0.91791500138).abs() < 1e-9);
+    }
+
+    #[test]
+    fn ccdf() {
+        let expo = Exponential {
+            lambda: 2.5,
+            x_min: 1.0,
+        };
+        let x = 2.0;
+        let c = expo.ccdf(x);
+        assert!((c - 0.08208499862).abs() < 1e-9);
     }
 }
