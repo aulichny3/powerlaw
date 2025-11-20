@@ -38,7 +38,7 @@ pub fn hypothesis_test(data: Vec<f64>, prec: f64, alpha: f64, x_min: f64, best_d
 
     println!("Generating M = {:?} simulated datasets of length n = {:?} with tail size {:?} and probability of the tail P(tail|data) = {:?}", sim_params.num_sims_m, sim_params.sim_len_n, sim_params.n_tail, sim_params.p_tail);
 
-    let S: Vec<Vec<f64>> = sim::generate_synthetic_datasets(&data, x_min, sim_params, alpha);
+    let S: Vec<Vec<f64>> = sim::generate_synthetic_datasets(&data, alpha, x_min, sim_params);
     let sim_size: usize = S.len();
 
     // loop through each sim and calculate the KS d value
