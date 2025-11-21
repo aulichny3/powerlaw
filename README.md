@@ -36,6 +36,7 @@ Or from [crates.io](https://crates.io):
 ```bash
 cargo install powerlaw
 ```
+![installation demo gif](.github/install.gif)
 
 ## CLI Usage
 
@@ -50,7 +51,7 @@ Use `fit` to perform the initial analysis, finding the maximum likelihood estima
 ```bash
 powerlaw fit <FILEPATH>
 ```
-
+![Fit demo gif](.github/fit.gif)
 **Example:**
 
 ```
@@ -76,12 +77,13 @@ tail length:    59
 Use `test` to perform the full analysis, including the hypothesis test to determine if the data is plausibly drawn from a power-law distribution. This command requires a `--precision` argument for the p-value calculation.
 **Caution: This function can be very slow depending on the data**.
 
+
 **Command:**
 
 ```bash
 powerlaw test <FILEPATH> --precision <VALUE>
 ```
-
+![Hypothesis test demo gif](.github/test.gif)
 **Example:**
 
 ```
