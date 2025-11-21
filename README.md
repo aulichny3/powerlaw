@@ -56,10 +56,19 @@ powerlaw fit <FILEPATH>
 ```
 $ powerlaw fit Data/reference_data/blackouts.txt
 
-Data: Data/reference_data/blackouts.txt
+Data: ./Data/reference_data/blackouts.txt
 n: 211
-Pareto Type I parameters - alpha: 1.2726372198302858 x_min 230000.0 KS stat: 0.06067379629443781 tail length: 59
-Generic Power-Law [Cx^(-alpha)] parameters - alpha: 2.272637219830286 x_min 230000.0 KS stat: 0.06067379629443781 tail length: 59
+-- Pareto Type I parameters -- 
+alpha:          1.2726372198302858 
+x_min:          230000.0 
+KS stat:        0.06067379629443781 
+tail length:    59
+
+-- Generic Power-Law [Cx^(-alpha)] parameters -- 
+alpha:          2.272637219830286 
+x_min:          230000.0 
+KS stat:        0.06067379629443781 
+tail length:    59
 ```
 
 ### `test` subcommand
@@ -78,17 +87,29 @@ powerlaw test <FILEPATH> --precision <VALUE>
 ```
 $ powerlaw test Data/reference_data/blackouts.txt --precision 0.01
 
-Data: Data/reference_data/blackouts.txt
+Data: ./Data/reference_data/blackouts.txt
 Precision: 0.01
 n: 211
-Pareto Type I parameters - alpha: 1.2726372198302858 x_min 230000.0 KS stat: 0.06067379629443781 tail length: 59
-Generic Power-Law [Cx^(-alpha)] parameters - alpha: 2.272637219830286 x_min 230000.0 KS stat: 0.06067379629443781 tail length: 59
-Calculating the degree of uncertainty of the parameters...
-x_min std: 75388.370780452 alpha std: 0.2543727775138083
-Testing the null hypothesis H0 that a Power-Law is a plausible fit to the data...
+-- Pareto Type I parameters -- 
+alpha:          1.2726372198302858 
+x_min:          230000.0 
+KS stat:        0.06067379629443781 
+tail length:    59
+
+-- Generic Power-Law [Cx^(-alpha)] parameters -- 
+alpha:          2.272637219830286 
+x_min:          230000.0 
+KS stat:        0.06067379629443781 
+tail length:    59
+
+-- Parameter Uncertainty --
+x_min std:      93081.20130389203 
+alpha std:      0.26478692708043355
+
+-- Hypothesis Testing --
 Generating M = 2500 simulated datasets of length n = 211 with tail size 59 and probability of the tail P(tail|data) = 0.2796208530805687
-Qty of simulations with KS statistic > empirical data = 1941
-p-value: 0.7764
+Qty of simulations with KS statistic > empirical data = 1963
+p-value: 0.7852
 Fail to reject the null H0: Power-Law distribution is a plausible fit to the data.
 ```
 
