@@ -132,41 +132,55 @@ You can also use `powerlaw` as a library in your own Rust projects.
 
 ```toml
 [dependencies]
-powerlaw = "0.0.16" # Or the version you need
+powerlaw = "0.0.17" # Or the latest version
 ```
 
-**2. Example:**
+**2. Example: Fitting and Comparing Distributions**
+
+The new API makes it easy to find the best-fit `x_min` for a power-law distribution and then compare it against other distributions that are fit to the same tail portion of the data.
 
 ```rust
-use powerlaw::{dist, util};
+use powerlaw::{
+    dist::{self, exponential::Exponential, pareto::Pareto},
+    util, FittedResults,
+};
 
 fn main() {
     // 1. Read your data into a Vec<f64>
     let mut data = util::read_csv("path/to/your/data.csv").unwrap();
 
-    // 2. Find the MLE alphas for all potential x_mins
-    let alphas = dist::pareto::find_alphas_fast(&mut data);
-
-    // 3. Find the best fit (x_min, alpha) pair based on the KS statistic
-    let best_fit = dist::pareto::gof(&data, &alphas.0, &alphas.1);
-
-    println!("Best fit found: x_min = {}, alpha = {}", best_fit.x_min, best_fit.alpha);
-
-    // 4. Optionally, run the hypothesis test
-    let precision = 0.01;
-    let h_0 = dist::pareto::hypothesis_test(
-        data,
-        precision,
-        best_fit.alpha,
-        best_fit.x_min,
-        best_fit.D,
+    // 2. Find the best-fit Pareto parameters to determine the tail of the distribution
+    let (x_mins, alphas) = dist::pareto::find_alphas_fast(&mut data);
+    let best_fitment = dist::pareto::gof(&data, &x_mins, &alphas);
+    println!(
+        "Pareto fit found: x_min = {}, alpha = {}",
+        best_fitment.x_min, best_fitment.alpha
     );
 
-    println!("Hypothesis test p-value: {}", h_0.p);
-    if h_0.p > 0.1 {
-        println!("The power-law model is a plausible fit.");
-    } else {
-        println!("The power-law model is not a plausible fit.");
+    // 3. Create a manager to hold the results of fitting other distributions
+    let mut results = FittedResults::new();
+
+    // 4. Create fully-formed distribution objects from the initial fitment
+    //    and add them to the results manager.
+
+    // Create a Pareto distribution from the fitment
+    let pareto_dist = Pareto::from(best_fitment.clone());
+    results.add(pareto_dist);
+
+    // Create an Exponential distribution using the x_min from the fitment
+    let exp_dist = Exponential::from_fitment(&data, &best_fitment);
+    results.add(exp_dist);
+
+    // (In the future, you could add more distributions here, e.g., Lognormal)
+
+    // 5. Get a summary of all fitted distributions
+    println!("\n--- Fitted Distributions Summary ---");
+    let summary = results.summary();
+    for (name, params) in summary {
+        println!("Distribution: {}", name);
+        for (param_name, param_value) in params {
+            println!("  - {}: {}", param_name, param_value);
+        }
     }
 }
 ```
