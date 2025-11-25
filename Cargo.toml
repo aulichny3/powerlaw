@@ -1,6 +1,6 @@
 [package]
 name = "powerlaw"
-version = "0.0.18"
+version = "0.0.19"
 homepage = "https://github.com/aulichny3/powerlaw"
 edition = "2021"
 license = "MIT OR Apache-2.0"
@@ -8,6 +8,10 @@ authors = ["Adam Ulichny <aulichny@protonmail.com>"]
 description = "A Rust library and command-line tool for analyzing power-law distributions in empirical data."
 categories = ["mathematics", "finance", "science"]
 repository = "https://github.com/aulichny3/powerlaw.git"
+exclude = [
+    "*.gif",
+]
+
 
 [lib]
 name = "powerlaw"

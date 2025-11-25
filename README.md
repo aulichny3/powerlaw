@@ -36,7 +36,7 @@ Or from [crates.io](https://crates.io):
 ```bash
 cargo install powerlaw
 ```
-![installation demo gif](.github/install.gif)
+![installation demo gif](https://raw.githubusercontent.com/aulichny3/powerlaw/main/.github/install.gif)
 
 ## CLI Usage
 
@@ -51,7 +51,7 @@ Use `fit` to perform the initial analysis, finding the maximum likelihood estima
 ```bash
 powerlaw fit <FILEPATH>
 ```
-![Fit demo gif](.github/fit.gif)
+![Fit demo gif](https://raw.githubusercontent.com/aulichny3/powerlaw/main/.github/fit.gif)
 **Example:**
 
 ```
@@ -83,7 +83,7 @@ Use `test` to perform the full analysis, including the hypothesis test to determ
 ```bash
 powerlaw test <FILEPATH> --precision <VALUE>
 ```
-![Hypothesis test demo gif](.github/test.gif)
+![Hypothesis test demo gif](https://raw.githubusercontent.com/aulichny3/powerlaw/main/.github/test.gif)
 **Example:**
 
 ```
@@ -132,7 +132,7 @@ You can also use `powerlaw` as a library in your own Rust projects.
 
 ```toml
 [dependencies]
-powerlaw = "0.0.18" # Or the latest version
+powerlaw = "0.0.19" # Or the latest version
 ```
 
 **2. Example: Fitting and Comparing Distributions**
