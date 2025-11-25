@@ -5,9 +5,9 @@
 // at the root of this source tree.
 
 //! Represents the Pareto Type I density function parameterized by its alpha and minimum x value.
-//! P(X=x) = x_min^α * x^(-1 - 𝛼) * α
+//! P(X=x) = x_min^𝛼 * x^(-1 - 𝛼) * 𝛼
 //!
-//! This is computationally equivalent to α * x_min.powf(α) / x.powf(α-1)
+//! This is computationally equivalent to 𝛼 * x_min.powf(𝛼) / x.powf(𝛼-1)
 
 pub mod estimation;
 pub mod gof;
@@ -30,7 +30,7 @@ impl Distribution for Pareto {
         /*
         The parameterization used is the same as Wolfram Mathematica.
         It is computationally equivalent to:
-        α * x_min.powf(α) / x.powf(α-1)
+        𝛼 * x_min.powf(𝛼) / x.powf(𝛼-1)
         */
         if x >= self.x_min {
             return self.x_min.powf(self.alpha) * x.powf(-1. - self.alpha) * self.alpha;
@@ -84,6 +84,10 @@ impl Pareto {
     }
 }
 
+/// Creates a `Pareto` distribution directly from a `Fitment` result.
+///
+/// This allows for a clean conversion from the results of a goodness-of-fit test
+/// to a concrete distribution instance.
 impl From<Fitment> for Pareto {
     fn from(fitment: Fitment) -> Self {
         Self {

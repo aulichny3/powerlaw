@@ -83,7 +83,7 @@ fn run_analysis(filepath: PathBuf, precision: Option<f64>) {
     if let Some(prec) = precision {
         //calculate uncertainly of the estimates by generating synthetic datasets and finding the best fit for them (Sec 3.4 Clauset et al.)
         // this needs more work
-        println!("\n-- Parameter Uncertainty --");
+        println!("\n-- Pareto Type I Parameter Uncertainty --");
 
         let (xm, a) = dist::pareto::estimation::param_est(&data, 100);
         println!("x_min std:\t{} \nalpha std:\t{}", xm, a);
