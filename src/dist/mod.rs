@@ -36,4 +36,10 @@ pub trait Distribution {
     ///
     /// This trait  intentionally leaves out summing the vector of likelihoods for optional use in Vuongs closeness test see https://en.wikipedia.org/wiki/Vuong%27s_closeness_test
     fn loglikelihood(&self, x: &[f64]) -> Vec<f64>;
+
+    /// Returns the name of the distribution.
+    fn name(&self) -> &'static str;
+
+    /// Returns a vector of the distribution's parameters as (name, value) tuples.
+    fn parameters(&self) -> Vec<(&'static str, f64)>;
 }

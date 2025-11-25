@@ -63,7 +63,17 @@ impl Distribution for Pareto {
     fn loglikelihood(&self, data: &[f64]) -> Vec<f64> {
         data.iter().map(|&x| self.pdf(x).ln()).collect()
     }
+
+    fn name(&self) -> &'static str {
+        "Pareto"
+    }
+
+    fn parameters(&self) -> Vec<(&'static str, f64)> {
+        vec![("alpha", self.alpha), ("x_min", self.x_min)]
+    }
 }
+
+use crate::dist::pareto::gof::Fitment;
 
 impl Pareto {
     pub fn new(alpha: f64, x_min: f64) -> Self {
@@ -71,6 +81,15 @@ impl Pareto {
             panic!("alpha and x_min parameters for Pareto Type I must be positive. (a > 0, x_min > 0).");
         }
         Pareto { alpha, x_min }
+    }
+}
+
+impl From<Fitment> for Pareto {
+    fn from(fitment: Fitment) -> Self {
+        Self {
+            alpha: fitment.alpha,
+            x_min: fitment.x_min,
+        }
     }
 }
 

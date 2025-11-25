@@ -78,6 +78,14 @@ impl Distribution for Powerlaw {
     fn loglikelihood(&self, data: &[f64]) -> Vec<f64> {
         data.iter().map(|&x| self.pdf(x).ln()).collect()
     }
+
+    fn name(&self) -> &'static str {
+        "Powerlaw"
+    }
+
+    fn parameters(&self) -> Vec<(&'static str, f64)> {
+        vec![("alpha", self.alpha), ("x_min", self.x_min)]
+    }
 }
 
 /// Calculates the Maximum Likelihood Estimate (MLE) for the alpha parameter of a power-law distribution.
