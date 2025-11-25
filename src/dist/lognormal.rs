@@ -83,6 +83,14 @@ impl Distribution for Lognormal {
     fn loglikelihood(&self, data: &[f64]) -> Vec<f64> {
         data.iter().map(|&x| self.pdf(x).ln()).collect()
     }
+
+    fn name(&self) -> &'static str {
+        "Lognormal"
+    }
+
+    fn parameters(&self) -> Vec<(&'static str, f64)> {
+        vec![("mu", self.mu), ("sigma", self.sigma)]
+    }
 }
 
 impl Lognormal {
@@ -141,7 +149,7 @@ mod tests {
         let mut rng = rand::rng();
         // Check if generated values are positive
         for _ in 0..100 {
-            let u: f64 = rng.random_range(0.001..0.999);
+            let u: f64 = rng.gen_range(0.001..0.999);
             let val = dist.rv(u);
             assert!(val > 0.0, "Generated value was not positive: {}", val);
         }

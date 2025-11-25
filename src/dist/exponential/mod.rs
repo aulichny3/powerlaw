@@ -9,6 +9,7 @@ pub use self::estimation::lambda_hat;
 
 /// Exponential distribution parameterized by its lambda parameter.
 use super::Distribution;
+use crate::dist::pareto::gof::Fitment;
 
 /// Represents an Exponential distribution.
 ///
@@ -23,6 +24,16 @@ use super::Distribution;
 pub struct Exponential {
     pub lambda: f64,
     pub x_min: f64,
+}
+
+impl Exponential {
+    /// Creates a new Exponential distribution by fitting it to data
+    /// using the x_min from a previous Pareto fit.
+    pub fn from_fitment(data: &[f64], fitment: &Fitment) -> Self {
+        let x_min = fitment.x_min;
+        let lambda = estimation::lambda_hat(data, x_min);
+        Self { lambda, x_min }
+    }
 }
 
 /// Implements the `Distribution` trait for the `Exponential` distribution.
@@ -87,6 +98,14 @@ impl Distribution for Exponential {
     /// Calculates the log-likelihood of the data given the distribution.
     fn loglikelihood(&self, data: &[f64]) -> Vec<f64> {
         data.iter().map(|&x| self.pdf(x).ln()).collect()
+    }
+
+    fn name(&self) -> &'static str {
+        "Exponential"
+    }
+
+    fn parameters(&self) -> Vec<(&'static str, f64)> {
+        vec![("lambda", self.lambda), ("x_min", self.x_min)]
     }
 }
 

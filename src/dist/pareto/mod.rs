@@ -5,9 +5,9 @@
 // at the root of this source tree.
 
 //! Represents the Pareto Type I density function parameterized by its alpha and minimum x value.
-//! P(X=x) = x_min^α * x^(-1 - 𝛼) * α
+//! P(X=x) = x_min^𝛼 * x^(-1 - 𝛼) * 𝛼
 //!
-//! This is computationally equivalent to α * x_min.powf(α) / x.powf(α-1)
+//! This is computationally equivalent to 𝛼 * x_min.powf(𝛼) / x.powf(𝛼-1)
 
 pub mod estimation;
 pub mod gof;
@@ -30,7 +30,7 @@ impl Distribution for Pareto {
         /*
         The parameterization used is the same as Wolfram Mathematica.
         It is computationally equivalent to:
-        α * x_min.powf(α) / x.powf(α-1)
+        𝛼 * x_min.powf(𝛼) / x.powf(𝛼-1)
         */
         if x >= self.x_min {
             return self.x_min.powf(self.alpha) * x.powf(-1. - self.alpha) * self.alpha;
@@ -63,7 +63,17 @@ impl Distribution for Pareto {
     fn loglikelihood(&self, data: &[f64]) -> Vec<f64> {
         data.iter().map(|&x| self.pdf(x).ln()).collect()
     }
+
+    fn name(&self) -> &'static str {
+        "Pareto"
+    }
+
+    fn parameters(&self) -> Vec<(&'static str, f64)> {
+        vec![("alpha", self.alpha), ("x_min", self.x_min)]
+    }
 }
+
+use crate::dist::pareto::gof::Fitment;
 
 impl Pareto {
     pub fn new(alpha: f64, x_min: f64) -> Self {
@@ -71,6 +81,19 @@ impl Pareto {
             panic!("alpha and x_min parameters for Pareto Type I must be positive. (a > 0, x_min > 0).");
         }
         Pareto { alpha, x_min }
+    }
+}
+
+/// Creates a `Pareto` distribution directly from a `Fitment` result.
+///
+/// This allows for a clean conversion from the results of a goodness-of-fit test
+/// to a concrete distribution instance.
+impl From<Fitment> for Pareto {
+    fn from(fitment: Fitment) -> Self {
+        Self {
+            alpha: fitment.alpha,
+            x_min: fitment.x_min,
+        }
     }
 }
 
