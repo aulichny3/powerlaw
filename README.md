@@ -149,11 +149,11 @@ fn main() {
     // 1. Read your data into a Vec<f64>
     let mut data = util::read_csv("path/to/your/data.csv").unwrap();
 
-    // 2. Find the best-fit Pareto parameters to determine the tail of the distribution
+    // 2. Find the best-fit Pareto Type I parameters to determine the tail of the distribution
     let (x_mins, alphas) = dist::pareto::find_alphas_fast(&mut data);
     let best_fitment = dist::pareto::gof(&data, &x_mins, &alphas);
     println!(
-        "Pareto fit found: x_min = {}, alpha = {}",
+        "Pareto Type I best fit found: x_min = {}, alpha = {}",
         best_fitment.x_min, best_fitment.alpha
     );
 
@@ -163,11 +163,11 @@ fn main() {
     // 4. Create fully-formed distribution objects from the initial fitment
     //    and add them to the results manager.
 
-    // Create a Pareto distribution from the fitment
+    // Create a Pareto distribution from the fitment for access to pdf(), cdf() etc  
     let pareto_dist = Pareto::from(best_fitment.clone());
     results.add(pareto_dist);
 
-    // Create an Exponential distribution using the x_min from the fitment
+    // Create an Shifted Exponential distribution using the x_min from the fitment
     let exp_dist = Exponential::from_fitment(&data, &best_fitment);
     results.add(exp_dist);
 
