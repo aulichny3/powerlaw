@@ -4,6 +4,7 @@
 // that can be found in the LICENSE-MIT or LICENSE-APACHE files
 // at the root of this source tree.
 
+//! Keeps track of fitted distributions, their names and parameters. 
 use crate::dist::Distribution;
 
 /// A container to hold and manage multiple fitted distributions.
