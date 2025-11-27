@@ -17,11 +17,10 @@
 pub fn lambda_hat(data: &[f64], x_min: f64) -> f64 {
     // This is a placeholder. The user should implement the actual MLE calculation.
     // For a shifted exponential distribution, the MLE for lambda is:
-    // n / (sum(x_i) - n * x_min)
+    // n / sum(x_i - x_min)
     // where n is the number of data points.
     let srt: Vec<_> = data.into_iter().filter(|&x| x >= &x_min).collect();
     let n = srt.len() as f64;
 
-    let sum_x: f64 = srt.iter().copied().sum();
-    n / (sum_x - n * x_min)
+    n / srt.iter().map(|&x| x - x_min).sum::<f64>()
 }
