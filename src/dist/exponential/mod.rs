@@ -49,7 +49,10 @@ impl Distribution for Exponential {
     /// # Returns
     /// The PDF value at `x`.
     fn pdf(&self, x: f64) -> f64 {
-        self.lambda * std::f64::consts::E.powf(-self.lambda * (x - self.x_min))
+        if x >= self.x_min {
+            return self.lambda * std::f64::consts::E.powf(-self.lambda * (x - self.x_min));
+        }
+        0.
     }
 
     /// Calculates the cumulative distribution function (CDF) value at a given point `x`.
@@ -63,8 +66,12 @@ impl Distribution for Exponential {
     /// # Returns
     /// The CDF value at `x`.
     fn cdf(&self, x: f64) -> f64 {
-        1. - std::f64::consts::E.powf(-self.lambda * (x - self.x_min))
+        if x >= self.x_min {
+            return 1. - std::f64::consts::E.powf(-self.lambda * (x - self.x_min));
+        }
+        0.
     }
+    
 
     /// Calculates the complementary cumulative distribution function (CCDF)
     /// (also known as the survival function) value at a given point `x`.
@@ -81,7 +88,10 @@ impl Distribution for Exponential {
         // This can be simplified to `std::f64::consts::E.powf(-self.lambda * x)`
         // but keeping it as `1. - self.cdf(x)` for consistency with the original structure
         // and to avoid functional changes.
-        1. - self.cdf(x)
+        if x >= self.x_min {
+            return 1. - self.cdf(x);
+        }
+        0.
     }
 
     /// Generates a random variate from the Exponential distribution using the inverse transform method.
@@ -92,7 +102,7 @@ impl Distribution for Exponential {
     /// # Returns
     /// A random variate `x` from the Exponential distribution.
     fn rv(&self, u: f64) -> f64 {
-        self.x_min - (1. / self.lambda) * u.ln() // technically 1-U which is equivalent to U in this context.
+        self.x_min - (1. / self.lambda) * (1.-u).ln() // technically 1-U which is equivalent to U in this context.
     }
 
     /// Calculates the log-likelihood of the data given the distribution.
@@ -124,7 +134,7 @@ mod tests {
         // X = x
         let x: f64 = expo.rv(0.2);
 
-        assert_eq!(x, 0.05186820459461912);
+        assert_eq!(x, 0.03148152281344426);
     }
 
     #[test]
