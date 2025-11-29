@@ -9,7 +9,7 @@ pub use self::estimation::lambda_hat;
 
 /// Exponential distribution parameterized by its lambda parameter.
 use super::Distribution;
-use crate::dist::pareto::gof::Fitment;
+use crate::dist::pareto::gof::ParetoFit;
 
 /// Represents an Exponential distribution.
 ///
@@ -29,7 +29,7 @@ pub struct Exponential {
 impl Exponential {
     /// Creates a new Exponential distribution by fitting it to data
     /// using the x_min from a previous Pareto fit.
-    pub fn from_fitment(data: &[f64], fitment: &Fitment) -> Self {
+    pub fn from_fitment(data: &[f64], fitment: &ParetoFit) -> Self {
         let x_min = fitment.x_min;
         let lambda = estimation::lambda_hat(data, x_min);
         Self { lambda, x_min }

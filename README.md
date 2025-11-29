@@ -141,8 +141,9 @@ The new API makes it easy to find the best-fit `x_min` for a power-law distribut
 
 ```rust
 use powerlaw::{
-    dist::{self, exponential::Exponential, pareto::Pareto},
-    util, FittedResults,
+    dist::{self, exponential::Exponential, pareto::Pareto}, 
+    util, 
+    FittedResults,
 };
 
 fn main() {
@@ -151,24 +152,24 @@ fn main() {
 
     // 2. Find the best-fit Pareto Type I parameters to determine the tail of the distribution
     let (x_mins, alphas) = dist::pareto::find_alphas_fast(&mut data);
-    let best_fitment = dist::pareto::gof(&data, &x_mins, &alphas);
+    let pareto_fit = dist::pareto::gof(&data, &x_mins, &alphas);
     println!(
         "Pareto Type I best fit found: x_min = {}, alpha = {}",
-        best_fitment.x_min, best_fitment.alpha
+        pareto_fit.x_min, pareto_fit.alpha
     );
 
     // 3. Create a manager to hold the results of fitting other distributions
     let mut results = FittedResults::new();
 
-    // 4. Create fully-formed distribution objects from the initial fitment
+    // 4. Create fully-formed distribution objects from the initial pareto_fit
     //    and add them to the results manager.
 
-    // Create a Pareto distribution from the fitment for access to pdf(), cdf() etc  
-    let pareto_dist = Pareto::from(best_fitment.clone());
+    // Create a Pareto distribution from the pareto_fit struct for access to pdf(), cdf() etc  
+    let pareto_dist = Pareto::from(pareto_fit.clone());
     results.add(pareto_dist);
 
-    // Create an Shifted Exponential distribution using the x_min from the fitment
-    let exp_dist = Exponential::from_fitment(&data, &best_fitment);
+    // Create an Shifted Exponential distribution using the x_min from the pareto_fit
+    let exp_dist = Exponential::from_fitment(&data, &pareto_fit);
     results.add(exp_dist);
 
     // (In the future, you could add more distributions here, e.g., Lognormal)
