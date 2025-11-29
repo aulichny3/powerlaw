@@ -73,7 +73,7 @@ impl Distribution for Pareto {
     }
 }
 
-use crate::dist::pareto::gof::Fitment;
+use crate::dist::pareto::gof::ParetoFit;
 
 impl Pareto {
     pub fn new(alpha: f64, x_min: f64) -> Self {
@@ -88,8 +88,8 @@ impl Pareto {
 ///
 /// This allows for a clean conversion from the results of a goodness-of-fit test
 /// to a concrete distribution instance.
-impl From<Fitment> for Pareto {
-    fn from(fitment: Fitment) -> Self {
+impl From<ParetoFit> for Pareto {
+    fn from(fitment: ParetoFit) -> Self {
         Self {
             alpha: fitment.alpha,
             x_min: fitment.x_min,

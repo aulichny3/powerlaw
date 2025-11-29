@@ -8,7 +8,7 @@
 //! Function to hypothesis test the best fit params to m synthetic datasets. This is Section 4 of
 //! Clauset, Aaron and Shalizi, Cosma Rohilla and Newman, M. E. J. [doi:10.48550/ARXIV.0706.1062](https://doi.org/10.48550/arXiv.0706.1062)
 use super::estimation::find_alphas_fast;
-use super::gof::{gof, Fitment};
+use super::gof::{gof, ParetoFit};
 use crate::util::sim::{self, SimParams};
 
 /// Represents the results of a hypothesis test.
@@ -50,7 +50,7 @@ pub fn hypothesis_test(data: Vec<f64>, prec: f64, alpha: f64, x_min: f64, best_d
 
         // Step 2: gof KS test the cdf of the proposed x_min and alpha hat vs the sample with x >= x_min.
         // this is to find the best x_min/alpha pair given the data
-        let best_fit: Fitment = gof(&i, &alphas.0, &alphas.1);
+        let best_fit: ParetoFit = gof(&i, &alphas.0, &alphas.1);
         //println!("best fit {:?}", best_fit);
         sim_ds.push(best_fit.d);
         //println!("Best fit D {d}");

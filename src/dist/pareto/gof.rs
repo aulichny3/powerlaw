@@ -16,7 +16,7 @@ use rayon::prelude::*;
 
 /// Represents the best-fit parameters and goodness-of-fit statistic for a dataset.
 #[derive(Debug, Clone)]
-pub struct Fitment {
+pub struct ParetoFit {
     /// The `x_min` parameter that yields the best fit.
     pub x_min: f64,
     /// The `alpha` parameter that yields the best fit.
@@ -37,9 +37,9 @@ pub struct Fitment {
 ///   corresponding to the `x_mins`.
 ///
 /// # Returns
-/// A `Fitment` struct containing the `x_min`, `alpha`, `d` (KS statistic), and `len_tail`
+/// A `ParetoFit` struct containing the `x_min`, `alpha`, `d` (KS statistic), and `len_tail`
 /// for the parameter pair that best fits the data (i.e., minimizes `d`).
-pub fn gof(data: &[f64], x_mins: &[f64], alphas: &[f64]) -> Fitment {
+pub fn gof(data: &[f64], x_mins: &[f64], alphas: &[f64]) -> ParetoFit {
     // 1. Sort the data once. O(D log D).
     let mut sorted_data_vec = data.to_vec();
     sorted_data_vec.sort_by(|a, b| a.partial_cmp(b).unwrap());
@@ -64,7 +64,7 @@ pub fn gof(data: &[f64], x_mins: &[f64], alphas: &[f64]) -> Fitment {
 
             let ks_result = stats::ks::ks_1sam_sorted(thread_data_slice, custom_cdf);
 
-            Fitment {
+            ParetoFit {
                 x_min,
                 alpha,
                 d: ks_result.2,
