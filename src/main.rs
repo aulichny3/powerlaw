@@ -73,12 +73,12 @@ fn run_analysis(filepath: PathBuf, precision: Option<f64>) {
     // Step 2: gof KS test the cdf of the proposed x_min and alpha hat vs the sample with x >= x_min. (Sec 3.3 Clauset et al.)
     // this is to find the best x_min/alpha pair given the data
 
-    let best_fit = dist::pareto::gof(&data, &alphas.0, &alphas.1);
+    let pareto_fit = dist::pareto::gof(&data, &alphas.0, &alphas.1);
     println!(
         "-- Pareto Type I parameters -- \nalpha:\t\t{:?} \nx_min:\t\t{:?} \nKS stat:\t{:?} \ntail length:\t{:?}",
-        best_fit.alpha, best_fit.x_min, best_fit.d, best_fit.len_tail
+        pareto_fit.alpha, pareto_fit.x_min, pareto_fit.d, pareto_fit.len_tail
     );
-    println!("\n-- Generic Power-Law [Cx^(-alpha)] parameters -- \nalpha:\t\t{:?} \nx_min:\t\t{:?} \nKS stat:\t{:?} \ntail length:\t{:?}", best_fit.alpha + 1. , best_fit.x_min, best_fit.d, best_fit.len_tail);
+    println!("\n-- Generic Power-Law [Cx^(-alpha)] parameters -- \nalpha:\t\t{:?} \nx_min:\t\t{:?} \nKS stat:\t{:?} \ntail length:\t{:?}", pareto_fit.alpha + 1. , pareto_fit.x_min, pareto_fit.d, pareto_fit.len_tail);
 
     if let Some(prec) = precision {
         //calculate uncertainly of the estimates by generating synthetic datasets and finding the best fit for them (Sec 3.4 Clauset et al.)
@@ -94,7 +94,7 @@ fn run_analysis(filepath: PathBuf, precision: Option<f64>) {
             "\n-- Hypothesis Testing --"
         );
         let h_0 =
-            dist::pareto::hypothesis_test(data, prec, best_fit.alpha, best_fit.x_min, best_fit.d);
+            dist::pareto::hypothesis_test(data, prec, pareto_fit.alpha, pareto_fit.x_min, pareto_fit.d);
         println!(
             "Qty of simulations with KS statistic > empirical data = {:?}",
             h_0.gt
