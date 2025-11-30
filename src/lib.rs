@@ -45,7 +45,6 @@
 //!
 //! ### Getting Help
 //!
-//! `clap` automatically generates comprehensive help messages. You can view them by running:
 //!
 //! ```bash
 //! # General help for the powerlaw CLI
