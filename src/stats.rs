@@ -185,6 +185,31 @@ pub mod ks {
     }
 }
 
+pub mod compare {
+    use crate::{stats::descriptive, util::erf};
+
+    /// Vuongs closeness test for comparing non nested distributions
+    /// This function takes a slice of loglikelihood's for each distribution (dist1, dist2) being compared.
+    /// 
+    /// see https://en.wikipedia.org/wiki/Vuong%27s_closeness_test
+    pub fn vuongs_test(dist1: &[f64], dist2: &[f64]) -> (f64, f64) {
+
+        let m: Vec<f64>  = dist1.iter().zip(dist2.iter()).map(|(a,b)| a - b).collect();
+        let mu_m = descriptive::mean(&m);
+        let sigma_m = descriptive::variance(&m, 1);
+        let n: f64 = dist1.len() as f64;
+        
+        // Calculate Z score
+        let Z: f64 = (mu_m * n.powf(1./2.)) / sigma_m;
+
+        let cdf: f64 = 0.5 * (1. + erf(Z / (2.0 as f64).sqrt()));
+        // calculate p-value
+        let p_value: f64 = 2. * (1. - cdf);
+
+        (Z, p_value)
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use crate::stats::{self, ks::ks_1sam_sorted, random::random_choice};

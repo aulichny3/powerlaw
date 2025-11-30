@@ -31,7 +31,7 @@ impl Exponential {
     /// using the x_min from a previous Pareto fit.
     pub fn from_fitment(data: &[f64], fitment: &ParetoFit) -> Self {
         let x_min = fitment.x_min;
-        let lambda = estimation::lambda_hat(data, x_min);
+        let lambda = estimation::lambda_hat(&data, x_min);
         Self { lambda, x_min }
     }
 }

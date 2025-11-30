@@ -5,7 +5,7 @@
 // at the root of this source tree.
 
 use clap::{Parser, Subcommand};
-use powerlaw::{dist, util};
+use powerlaw::{Distribution, dist, util, stats};
 use std::path::PathBuf;
 
 #[derive(Parser)]
@@ -94,7 +94,7 @@ fn run_analysis(filepath: PathBuf, precision: Option<f64>) {
             "\n-- Hypothesis Testing --"
         );
         let h_0 =
-            dist::pareto::hypothesis_test(data, prec, pareto_fit.alpha, pareto_fit.x_min, pareto_fit.d);
+            dist::pareto::hypothesis_test(&data, prec, pareto_fit.alpha, pareto_fit.x_min, pareto_fit.d);
         println!(
             "Qty of simulations with KS statistic > empirical data = {:?}",
             h_0.gt
@@ -109,5 +109,26 @@ fn run_analysis(filepath: PathBuf, precision: Option<f64>) {
             // fail to reject the null H0 that the distributions are the same.
             println!("Fail to reject the null H0: Power-Law distribution is a plausible fit to the data.")
         }
+    }   
+    // Vuongs test for model selection
+    let tail: Vec<f64> = data.iter().filter(|&x| x >= &pareto_fit.x_min).copied().collect();
+    // fit an exponential distribution and compare the results with vuongs test
+    let expo = dist::exponential::Exponential::from_fitment(&tail, &pareto_fit);
+    
+    //create a pareto based on our parameter estimates
+    let pareto = dist::pareto::Pareto::from(pareto_fit);
+
+    let dist1 = pareto.loglikelihood(&tail);
+    let dist2 = expo.loglikelihood(&tail);
+
+    let vuongs = stats::compare::vuongs_test(&dist1, &dist2);
+    println!("\n-- Vuongs Closeness Test --");
+    println!("Z score: {:?}", vuongs.0);
+    println!("p-value: {:?}", vuongs.1);
+
+    if (vuongs.1) <= 0.05 {
+        println!("Pareto and Exponential models are significantly different.");
+    } else {
+        println!("No significant difference between Pareto and Exponential models.");
     }
 }
