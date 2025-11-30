@@ -17,6 +17,7 @@ The methodology is heavily based on the techniques and statistical framework des
 -   **Parameter Estimation**: Estimates the parameters (`x_min`, `alpha`) of a power-law distribution from data.
 -   **Goodness-of-Fit**: Uses the Kolmogorov-Smirnov (KS) statistic to find the best-fitting parameters.
 -   **Hypothesis Testing**: Performs a hypothesis test to determine if the power-law model is a plausible fit for the data.
+-   **Vuongs Closeness Test**: Model selection for non-nested models.
 -   **High Performance**: Computationally intensive tasks are parallelized using Rayon for significant speedups.
 -   **Dual Use**: Can be used as a simple command-line tool or as a library in other Rust projects.
 
@@ -113,6 +114,11 @@ Generating M = 2500 simulated datasets of length n = 211 with tail size 59 and p
 Qty of simulations with KS statistic > empirical data = 1963
 p-value: 0.7852
 Fail to reject the null H0: Power-Law distribution is a plausible fit to the data.
+
+-- Vuongs Closeness Test --
+Z score: 1.215728942883436
+p-value: 0.22408832785041666
+No significant difference between Pareto and Exponential models.
 ```
 
 ### Getting Help

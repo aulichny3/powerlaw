@@ -188,10 +188,30 @@ pub mod ks {
 pub mod compare {
     use crate::{stats::descriptive, util::erf};
 
-    /// Vuongs closeness test for comparing non nested distributions
-    /// This function takes a slice of loglikelihood's for each distribution (dist1, dist2) being compared.
-    /// 
-    /// see https://en.wikipedia.org/wiki/Vuong%27s_closeness_test
+    /// Performs Vuong's closeness test for comparing two non-nested distributions.
+    ///
+    /// This test determines whether one distribution is significantly closer to the true data
+    /// generating process than another. It takes as input the log-likelihoods of the observed
+    /// data under each of the two distributions being compared.
+    ///
+    /// The test calculates a Z-statistic and a corresponding p-value. A significant p-value
+    /// (typically p < 0.05) suggests that one distribution is statistically preferred over the other.
+    /// The sign of the Z-statistic indicates which distribution is preferred:
+    /// - A positive Z-statistic suggests `dist1` is preferred.
+    /// - A negative Z-statistic suggests `dist2` is preferred.
+    ///
+    /// # Parameters
+    /// - `dist1`: A slice of log-likelihoods of the observed data under the first distribution.
+    /// - `dist2`: A slice of log-likelihoods of the observed data under the second distribution.
+    ///
+    /// # Returns
+    /// A tuple `(Z, p_value)` where:
+    /// - `Z`: The Vuong's Z-statistic.
+    /// - `p_value`: The two-sided p-value for the test.
+    ///
+    /// # References
+    /// - Vuong, Q. H. (1989). "Likelihood Ratio Tests for Model Selection and Non-Nested Hypotheses." Econometrica, 57(2), 307-333. doi:10.2307/1912557
+    /// - See also: <https://en.wikipedia.org/wiki/Vuong%27s_closeness_test>
     pub fn vuongs_test(dist1: &[f64], dist2: &[f64]) -> (f64, f64) {
 
         let m: Vec<f64>  = dist1.iter().zip(dist2.iter()).map(|(a,b)| a - b).collect();
