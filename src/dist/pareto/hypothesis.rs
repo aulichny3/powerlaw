@@ -32,7 +32,7 @@ pub struct H0 {
 ///
 /// # Returns
 /// An `H0` struct containing the results of the hypothesis test.
-pub fn hypothesis_test(data: Vec<f64>, prec: f64, alpha: f64, x_min: f64, best_d: f64) -> H0 {
+pub fn hypothesis_test(data: &Vec<f64>, prec: f64, alpha: f64, x_min: f64, best_d: f64) -> H0 {
     // setup the simulation: number of sims, elements in each etc.
     let sim_params: SimParams = sim::calculate_sim_params(&prec, &data, &x_min);
 

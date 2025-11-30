@@ -189,6 +189,8 @@ pub mod compare {
     use crate::{stats::descriptive, util::erf};
 
     /// Vuongs closeness test for comparing non nested distributions
+    /// This function takes a slice of loglikelihood's for each distribution (dist1, dist2) being compared.
+    /// 
     /// see https://en.wikipedia.org/wiki/Vuong%27s_closeness_test
     pub fn vuongs_test(dist1: &[f64], dist2: &[f64]) -> (f64, f64) {
 
