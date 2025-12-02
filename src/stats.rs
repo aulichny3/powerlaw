@@ -216,13 +216,13 @@ pub mod compare {
 
         let m: Vec<f64>  = dist1.iter().zip(dist2.iter()).map(|(a,b)| a - b).collect();
         let mu_m = descriptive::mean(&m);
-        let sigma_m = descriptive::variance(&m, 1);
+        let sigma_m = descriptive::variance(&m, 1).sqrt();
         let n: f64 = dist1.len() as f64;
         
         // Calculate Z score
         let Z: f64 = (mu_m * n.powf(1./2.)) / sigma_m;
 
-        let cdf: f64 = 0.5 * (1. + erf(Z / (2.0 as f64).sqrt()));
+        let cdf: f64 = 0.5 * (1. + erf(Z.abs() / (2.0 as f64).sqrt()));
         // calculate p-value
         let p_value: f64 = 2. * (1. - cdf);
 
@@ -269,5 +269,37 @@ mod tests {
         let (_, _, d) = ks_1sam_sorted(&X, F_x);
 
         assert!(d < 0.2, "KS stat for this test should be very small (approach 0) given the empirical is drawn from the theoretical CDF. found KS statistic = {d}");
+    }
+
+    #[test]
+    fn test_vuongs_test() {
+        // Case 1: Symmetric/Indistinguishable difference
+        // d1 and d2 have differences that average to 0.
+        // m = d1 - d2 = [-1, 1]. Mean = 0. Variance = 2.
+        let d1 = vec![1.0, 2.0];
+        let d2 = vec![2.0, 1.0];
+        let (z, p) = stats::compare::vuongs_test(&d1, &d2);
+        
+        assert_eq!(z, 0.0, "Z-score should be 0 for mean difference of 0");
+        assert!((p - 1.0).abs() < 1e-10, "P-value should be 1 for Z=0");
+
+        // Case 2: d1 significantly better than d2
+        // d1 = [10, 10, 10, 10], d2 = [5, 6, 5, 6]
+        // m = [5, 4, 5, 4]. Mean = 4.5. Var = 0.333... StdDev = 0.577...
+        // Z = (4.5 * sqrt(4)) / 0.577... = 9 / 0.577... approx 15.59
+        let d1 = vec![10.0, 10.0, 10.0, 10.0];
+        let d2 = vec![5.0, 6.0, 5.0, 6.0];
+        let (z, p) = stats::compare::vuongs_test(&d1, &d2);
+        
+        assert!(z > 10.0, "Z-score should be large and positive (approx 15.59), found {}", z);
+        assert!(p < 0.001, "P-value should be very small, found {}", p);
+
+        // Case 3: d2 significantly better than d1
+        // Swap d1 and d2. Z should be negative of Case 2.
+        let (z_neg, p_neg) = stats::compare::vuongs_test(&d2, &d1);
+        
+        assert!(z_neg < -10.0, "Z-score should be large and negative, found {}", z_neg);
+        assert!((z + z_neg).abs() < 1e-10, "Z-scores should be symmetric");
+        assert_eq!(p, p_neg, "P-values should be identical for symmetric cases");
     }
 }
