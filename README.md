@@ -116,10 +116,9 @@ p-value: 0.7852
 Fail to reject the null H0: Power-Law distribution is a plausible fit to the data.
 
 -- Vuongs Closeness Test --
-Z score: 1.215728942883436
-p-value: 0.22408832785041666
+Z score: 1.4208153737166338
+p-value: 0.15537054041363918
 No significant difference between Pareto and Exponential models.
-```
 
 ### Getting Help
 ```bash
