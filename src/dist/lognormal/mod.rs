@@ -10,7 +10,7 @@
 use super::Distribution;
 use crate::util::erf;
 use rand::Rng;
-
+pub mod estimation;
 /// Represents a Lognormal distribution.
 ///
 /// A random variable X is log-normally distributed if its natural logarithm ln(X)

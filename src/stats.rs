@@ -213,14 +213,13 @@ pub mod compare {
     /// - Vuong, Q. H. (1989). "Likelihood Ratio Tests for Model Selection and Non-Nested Hypotheses." Econometrica, 57(2), 307-333. doi:10.2307/1912557
     /// - See also: <https://en.wikipedia.org/wiki/Vuong%27s_closeness_test>
     pub fn vuongs_test(dist1: &[f64], dist2: &[f64]) -> (f64, f64) {
-
-        let m: Vec<f64>  = dist1.iter().zip(dist2.iter()).map(|(a,b)| a - b).collect();
+        let m: Vec<f64> = dist1.iter().zip(dist2.iter()).map(|(a, b)| a - b).collect();
         let mu_m = descriptive::mean(&m);
         let sigma_m = descriptive::variance(&m, 1).sqrt();
         let n: f64 = dist1.len() as f64;
-        
+
         // Calculate Z score
-        let Z: f64 = (mu_m * n.powf(1./2.)) / sigma_m;
+        let Z: f64 = (mu_m * n.powf(1. / 2.)) / sigma_m;
 
         let cdf: f64 = 0.5 * (1. + erf(Z.abs() / (2.0 as f64).sqrt()));
         // calculate p-value
@@ -279,7 +278,7 @@ mod tests {
         let d1 = vec![1.0, 2.0];
         let d2 = vec![2.0, 1.0];
         let (z, p) = stats::compare::vuongs_test(&d1, &d2);
-        
+
         assert_eq!(z, 0.0, "Z-score should be 0 for mean difference of 0");
         assert!((p - 1.0).abs() < 1e-10, "P-value should be 1 for Z=0");
 
@@ -290,15 +289,23 @@ mod tests {
         let d1 = vec![10.0, 10.0, 10.0, 10.0];
         let d2 = vec![5.0, 6.0, 5.0, 6.0];
         let (z, p) = stats::compare::vuongs_test(&d1, &d2);
-        
-        assert!(z > 10.0, "Z-score should be large and positive (approx 15.59), found {}", z);
+
+        assert!(
+            z > 10.0,
+            "Z-score should be large and positive (approx 15.59), found {}",
+            z
+        );
         assert!(p < 0.001, "P-value should be very small, found {}", p);
 
         // Case 3: d2 significantly better than d1
         // Swap d1 and d2. Z should be negative of Case 2.
         let (z_neg, p_neg) = stats::compare::vuongs_test(&d2, &d1);
-        
-        assert!(z_neg < -10.0, "Z-score should be large and negative, found {}", z_neg);
+
+        assert!(
+            z_neg < -10.0,
+            "Z-score should be large and negative, found {}",
+            z_neg
+        );
         assert!((z + z_neg).abs() < 1e-10, "Z-scores should be symmetric");
         assert_eq!(p, p_neg, "P-values should be identical for symmetric cases");
     }

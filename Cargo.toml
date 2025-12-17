@@ -33,3 +33,7 @@ criterion = { version = "0.5", features = ["html_reports"] }
 [[bench]]
 name = "benchmarks"
 harness = false
+
+[[bench]]
+name = "lognormal_bench"
+harness = false

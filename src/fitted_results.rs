@@ -4,7 +4,7 @@
 // that can be found in the LICENSE-MIT or LICENSE-APACHE files
 // at the root of this source tree.
 
-//! Keeps track of fitted distributions, their names and parameters. 
+//! Keeps track of fitted distributions, their names and parameters.
 use crate::dist::Distribution;
 
 /// A container to hold and manage multiple fitted distributions.
@@ -15,7 +15,9 @@ pub struct FittedResults {
 impl FittedResults {
     /// Creates a new, empty collection.
     pub fn new() -> Self {
-        Self { distributions: Vec::new() }
+        Self {
+            distributions: Vec::new(),
+        }
     }
 
     /// Adds a new fitted distribution to the collection.
@@ -27,6 +29,9 @@ impl FittedResults {
 
     /// Returns a summary of all fitted distributions and their parameters.
     pub fn summary(&self) -> Vec<(&'static str, Vec<(&'static str, f64)>)> {
-        self.distributions.iter().map(|d| (d.name(), d.parameters())).collect()
+        self.distributions
+            .iter()
+            .map(|d| (d.name(), d.parameters()))
+            .collect()
     }
 }
