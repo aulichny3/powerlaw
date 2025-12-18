@@ -71,7 +71,6 @@ impl Distribution for Exponential {
         }
         0.
     }
-    
 
     /// Calculates the complementary cumulative distribution function (CCDF)
     /// (also known as the survival function) value at a given point `x`.
@@ -102,7 +101,7 @@ impl Distribution for Exponential {
     /// # Returns
     /// A random variate `x` from the Exponential distribution.
     fn rv(&self, u: f64) -> f64 {
-        self.x_min - (1. / self.lambda) * (1.-u).ln() // technically 1-U which is equivalent to U in this context.
+        self.x_min - (1. / self.lambda) * (1. - u).ln() // technically 1-U which is equivalent to U in this context.
     }
 
     /// Calculates the log-likelihood of the data given the distribution.
