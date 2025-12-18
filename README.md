@@ -138,7 +138,7 @@ You can also use `powerlaw` as a library in your own Rust projects.
 
 ```toml
 [dependencies]
-powerlaw = "0.0.23" # Or the latest version
+powerlaw = "0.0.24" # Or the latest version
 ```
 
 **2. Example: Fitting and Comparing Distributions**
