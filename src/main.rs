@@ -112,7 +112,7 @@ fn run_analysis(filepath: PathBuf, precision: Option<f64>) {
             println!("Fail to reject the null H0: Power-Law distribution is a plausible fit to the data.")
         }
     }
-    
+
     // Vuongs test for model selection
 
     // isolate just the tail based on the pareto fit.
@@ -129,16 +129,15 @@ fn run_analysis(filepath: PathBuf, precision: Option<f64>) {
     // fit a truncated lognormal distribution and compare the results with vuongs test
     let lognormal = dist::lognormal::Lognormal::from_fitment(&tail, &pareto_fit);
 
-    // create a pareto based on our parameter estimates from earlier. Previously we just found parameters, 
-    // now we're making a full blown distribution with access to pdf/cdf etc 
+    // create a pareto based on our parameter estimates from earlier. Previously we just found parameters,
+    // now we're making a full blown distribution with access to pdf/cdf etc
     let pareto = dist::pareto::Pareto::from(pareto_fit);
-    
 
     let dist1 = pareto.loglikelihood(&tail);
     let dist2 = expo.loglikelihood(&tail);
     let dist3 = lognormal.loglikelihood(&tail);
 
-    // compare pareto with exponential 
+    // compare pareto with exponential
     let vuongs = stats::compare::vuongs_test(&dist1, &dist2);
     println!("\n-- Vuongs Closeness Test --");
     println!("Z score: {:?}", vuongs.0);

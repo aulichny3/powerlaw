@@ -202,5 +202,3 @@ pub fn param_est(data: &[f64], m_simulations: usize) -> (f64, f64) {
 
     (x_min_est, alpha_est)
 }
-
-

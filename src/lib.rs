@@ -72,11 +72,11 @@
 
 /// Module for various probability distributions.
 pub mod dist;
+pub mod fitted_results;
 /// Module for statistical inference and descriptive statistics.
 pub mod stats;
 /// Module for helper functions, including data reading and simulation.
 pub mod util;
-pub mod fitted_results;
 
 /// A trait for probability distributions, providing a common interface for PDF, CDF, and random variate generation.
 pub use dist::Distribution;

@@ -8,8 +8,8 @@
 //! of the variable's natural logarithm.
 
 use super::Distribution;
-use crate::util::erf;
 use crate::dist::pareto::gof::ParetoFit;
+use crate::util::erf;
 use rand::Rng;
 
 pub mod estimation;
@@ -47,7 +47,9 @@ impl Distribution for Lognormal {
 
         if self.x_min > 0.0 {
             let normalization = self.normalization();
-            if normalization == 0.0 { return 0.0; }
+            if normalization == 0.0 {
+                return 0.0;
+            }
             return raw_pdf / normalization;
         }
 
@@ -64,13 +66,15 @@ impl Distribution for Lognormal {
         if x <= 0.0 || x < self.x_min {
             return 0.0;
         }
-        
+
         let raw_cdf_x = self.raw_cdf(x);
-        
+
         if self.x_min > 0.0 {
             let raw_cdf_xmin = self.raw_cdf(self.x_min);
             let normalization = 1.0 - raw_cdf_xmin;
-            if normalization == 0.0 { return 1.0; }
+            if normalization == 0.0 {
+                return 1.0;
+            }
             return (raw_cdf_x - raw_cdf_xmin) / normalization;
         }
 
@@ -82,18 +86,22 @@ impl Distribution for Lognormal {
     fn ccdf(&self, x: f64) -> f64 {
         // S_trunc(x) = S(x) / S(x_min)
         if x < self.x_min {
-            return 1.0; 
+            return 1.0;
         }
-        if x <= 0.0 { return 1.0; } // Should handle x <= 0 if x_min=0
+        if x <= 0.0 {
+            return 1.0;
+        } // Should handle x <= 0 if x_min=0
 
         let raw_ccdf_x = 1.0 - self.raw_cdf(x);
 
         if self.x_min > 0.0 {
-             let raw_ccdf_xmin = 1.0 - self.raw_cdf(self.x_min);
-             if raw_ccdf_xmin == 0.0 { return 0.0; }
-             return raw_ccdf_x / raw_ccdf_xmin;
+            let raw_ccdf_xmin = 1.0 - self.raw_cdf(self.x_min);
+            if raw_ccdf_xmin == 0.0 {
+                return 0.0;
+            }
+            return raw_ccdf_x / raw_ccdf_xmin;
         }
-        
+
         raw_ccdf_x
     }
 
@@ -111,7 +119,7 @@ impl Distribution for Lognormal {
     fn rv(&self, u1: f64) -> f64 {
         let mut rng = rand::rng();
         let mut current_u1 = u1;
-        
+
         // Safety break
         let mut tries = 0;
         let max_tries = 10000;
@@ -124,18 +132,18 @@ impl Distribution for Lognormal {
 
             // Transform the standard normal variate to a log-normal variate
             let x = (self.mu + self.sigma * z).exp();
-            
+
             if x >= self.x_min {
                 return x;
             }
-            
+
             tries += 1;
             if tries > max_tries {
                 // Fallback to x_min to stay in bounds if rejection fails too many times
                 // This typically implies x_min is very far in the tail
                 return self.x_min;
             }
-            
+
             // New random u1 for next iteration
             current_u1 = rng.random();
         }
@@ -151,7 +159,11 @@ impl Distribution for Lognormal {
     }
 
     fn parameters(&self) -> Vec<(&'static str, f64)> {
-        vec![("mu", self.mu), ("sigma", self.sigma), ("x_min", self.x_min)]
+        vec![
+            ("mu", self.mu),
+            ("sigma", self.sigma),
+            ("x_min", self.x_min),
+        ]
     }
 }
 
@@ -165,9 +177,13 @@ impl Lognormal {
         if sigma <= 0.0 {
             panic!("sigma parameter for Lognormal must be positive (σ > 0).");
         }
-        Lognormal { mu, sigma, x_min: 0.0 }
+        Lognormal {
+            mu,
+            sigma,
+            x_min: 0.0,
+        }
     }
-    
+
     /// Creates a new Truncated Lognormal distribution.
     ///
     /// # Parameters
@@ -189,13 +205,15 @@ impl Lognormal {
         let (mu, sigma) = estimation::lognormal_mle_truncated_serial(data, x_min);
         Self { mu, sigma, x_min }
     }
-    
+
     // Helper for raw untruncated CDF
     fn raw_cdf(&self, x: f64) -> f64 {
-        if x <= 0.0 { return 0.0; }
+        if x <= 0.0 {
+            return 0.0;
+        }
         0.5 * (1.0 + erf((x.ln() - self.mu) / (self.sigma * (2.0_f64).sqrt())))
     }
-    
+
     fn normalization(&self) -> f64 {
         1.0 - self.raw_cdf(self.x_min)
     }
@@ -216,14 +234,14 @@ mod tests {
         assert_eq!(dist.pdf(0.0), 0.0);
         assert_eq!(dist.pdf(-1.0), 0.0);
     }
-    
+
     #[test]
     fn test_truncated_pdf() {
         // mu=0, sigma=1, x_min=1.0
         let dist = Lognormal::new_truncated(0.0, 1.0, 1.0);
         // PDF at x < 1.0 should be 0
         assert_eq!(dist.pdf(0.5), 0.0);
-        
+
         // Normalization: 1 - CDF(1.0) = 1 - 0.5 = 0.5
         // PDF at x=1.0: raw_pdf(1.0) / 0.5
         // raw_pdf(1.0) = 1/sqrt(2pi) ~ 0.3989
