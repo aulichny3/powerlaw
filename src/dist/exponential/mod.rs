@@ -1,15 +1,15 @@
-pub mod estimation;
-pub use self::estimation::lambda_hat;
-
 // Copyright (c) 2025 Adam Ulichny
 //
 // This source code is licensed under the MIT OR Apache-2.0 license
 // that can be found in the LICENSE-MIT or LICENSE-APACHE files
 // at the root of this source tree.
 
-/// Exponential distribution parameterized by its lambda parameter.
+//! Exponential distribution parameterized by its lambda parameter.
 use super::Distribution;
 use crate::dist::pareto::gof::ParetoFit;
+
+pub mod estimation;
+pub use self::estimation::lambda_hat;
 
 /// Represents an Exponential distribution.
 ///
@@ -84,13 +84,11 @@ impl Distribution for Exponential {
     /// # Returns
     /// The CCDF value at `x`.
     fn ccdf(&self, x: f64) -> f64 {
-        // This can be simplified to `std::f64::consts::E.powf(-self.lambda * x)`
-        // but keeping it as `1. - self.cdf(x)` for consistency with the original structure
-        // and to avoid functional changes.
-        if x >= self.x_min {
-            return 1. - self.cdf(x);
+        if x < self.x_min {
+            return 1.;  // entire mass is > x_min
         }
-        0.
+        //for x >= x_min, it's 1 - F9X)
+        return 1. - self.cdf(x);
     }
 
     /// Generates a random variate from the Exponential distribution using the inverse transform method.
