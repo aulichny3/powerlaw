@@ -72,7 +72,6 @@ fn run_analysis(filepath: PathBuf, precision: Option<f64>) {
 
     // Step 2: gof KS test the cdf of the proposed x_min and alpha hat vs the sample with x >= x_min. (Sec 3.3 Clauset et al.)
     // this is to find the best x_min/alpha pair given the data
-
     let pareto_fit = dist::pareto::gof(&data, &alphas.0, &alphas.1);
     println!(
         "-- Pareto Type I parameters -- \nalpha:\t\t{:?} \nx_min:\t\t{:?} \nKS stat:\t{:?} \ntail length:\t{:?}",
@@ -113,21 +112,33 @@ fn run_analysis(filepath: PathBuf, precision: Option<f64>) {
             println!("Fail to reject the null H0: Power-Law distribution is a plausible fit to the data.")
         }
     }
+    
     // Vuongs test for model selection
+
+    // isolate just the tail based on the pareto fit.
     let tail: Vec<f64> = data
         .iter()
         .filter(|&x| x >= &pareto_fit.x_min)
         .copied()
         .collect();
+
     // fit an exponential distribution and compare the results with vuongs test
     let expo = dist::exponential::Exponential::from_fitment(&tail, &pareto_fit);
+    // add it to the container
 
-    //create a pareto based on our parameter estimates
+    // fit a truncated lognormal distribution and compare the results with vuongs test
+    let lognormal = dist::lognormal::Lognormal::from_fitment(&tail, &pareto_fit);
+
+    // create a pareto based on our parameter estimates from earlier. Previously we just found parameters, 
+    // now we're making a full blown distribution with access to pdf/cdf etc 
     let pareto = dist::pareto::Pareto::from(pareto_fit);
+    
 
     let dist1 = pareto.loglikelihood(&tail);
     let dist2 = expo.loglikelihood(&tail);
+    let dist3 = lognormal.loglikelihood(&tail);
 
+    // compare pareto with exponential 
     let vuongs = stats::compare::vuongs_test(&dist1, &dist2);
     println!("\n-- Vuongs Closeness Test --");
     println!("Z score: {:?}", vuongs.0);
@@ -137,5 +148,17 @@ fn run_analysis(filepath: PathBuf, precision: Option<f64>) {
         println!("Pareto and Exponential models are significantly different.");
     } else {
         println!("No significant difference between Pareto and Exponential models.");
+    }
+
+    // compare pareto with truncated lognormal -> now we're duplicating code and will fix this later
+    let vuongs = stats::compare::vuongs_test(&dist1, &dist3);
+    println!("\n-- Vuongs Closeness Test --");
+    println!("Z score: {:?}", vuongs.0);
+    println!("p-value: {:?}", vuongs.1);
+
+    if (vuongs.1) <= 0.05 {
+        println!("Pareto and truncated Lognormal models are significantly different.");
+    } else {
+        println!("No significant difference between Pareto and truncated Lognormal models.");
     }
 }
