@@ -63,39 +63,30 @@ fn test_lognormal_mle_truncation_validity() {
         true_sigma
     );
 
-    // 5. Verify Density Validity
-    // show that the estimated parameters define a distribution which, when properly truncated,
-    // matches the probability density of the data.
-
-    let est_dist = Lognormal::new(est_mu, est_sigma);
-
-    // The normalization constant for the truncated distribution is 1 / P(X >= x_min).
-    // P(X >= x_min) is exactly ccdf(x_min).
-    let normalization = est_dist.ccdf(x_min);
-
-    println!("Normalization (P(X >= {})): {}", x_min, normalization);
-
+    // 5. Verify Density Validity (Integration)
+    // We use the new_truncated constructor which handles normalization internally.
+    let est_dist = Lognormal::new_truncated(est_mu, est_sigma, x_min);
+    
     // Integrate the *truncated* PDF from x_min to infinity.
-    // The truncated PDF is: f_trunc(x) = f_untrunc(x) / normalization  (for x >= x_min)
-    //  numerically integrate to check if it sums to 1.0.
-
+    // Since the struct now handles truncation, est_dist.pdf(x) is already f_trunc(x).
+    
     let mut area = 0.0;
     // Step size for integration
     let step = 0.005;
-    // Upper limit for integration
-    // exp(mu + 8*sigma) covers almost all probability mass.
-    let limit = (est_mu + 8.0 * est_sigma).exp();
-
+    // Upper limit for integration (effectively infinity). 
+    // exp(mu + 8*sigma) covers almost all probability mass. 
+    let limit = (est_mu + 8.0 * est_sigma).exp(); 
+    
     let mut x = x_min;
     while x < limit {
-        let p_mid = est_dist.pdf(x + step / 2.0) / normalization;
+        let p_mid = est_dist.pdf(x + step/2.0);
         area += p_mid * step;
         x += step;
     }
 
-    println!("Integral of truncated PDF: {}", area);
-
-    // The integral should be close to 1.0.
-    // The error comes from numerical integration approximations.
-    assert!((area - 1.0).abs() < 0.01, "The truncated PDF (derived from MLE params and struct PDF) does not integrate to 1.0. Integral: {}", area);
+    println!("Integral of truncated PDF (using struct internal normalization): {}", area);
+    
+    // The integral should be very close to 1.0.
+    assert!((area - 1.0).abs() < 0.01, 
+        "The truncated PDF (from Lognormal struct) does not integrate to 1.0. Integral: {}", area);
 }
