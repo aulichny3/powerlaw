@@ -11,12 +11,24 @@
 //! common expressions such as the Pareto Type I pdf listed at:
 //! [https://en.wikipedia.org/wiki/Pareto_distribution](https://en.wikipedia.org/wiki/Pareto_distribution)
 use super::Distribution;
+use crate::dist::pareto::gof::ParetoFit;
 
-/// Represents a generic Power-Law distribution, which is a continuous, unbounded distribution
-/// that simplifies to a Pareto Type I distribution.
+pub mod estimation;
+pub use self::estimation::alpha_hat;
+
+/// Represents a generic Power-Law distribution, which is a continuous, unbounded distribution.
+///
+/// The probability density function (PDF) is defined as:
+/// f(x) = C * x^(-alpha)
+/// where C is the normalization constant: (alpha - 1) * x_min^(alpha - 1)
+/// and x >= x_min.
+///
+/// This simplifies to a Pareto Type I distribution.
+/// Note: The `alpha` parameter here is the power-law exponent. It is equal to `1 + alpha_pareto`,
+/// where `alpha_pareto` is the shape parameter of the standard Pareto Type I distribution.
 ///
 /// # Fields
-/// - `alpha`: The scaling parameter (α) of the distribution. Must be greater than 1.
+/// - `alpha`: The power-law exponent (α). Must be greater than 1.
 /// - `x_min`: The minimum value of the distribution (x_m). Must be positive.
 pub struct Powerlaw {
     pub alpha: f64,
@@ -27,9 +39,7 @@ pub struct Powerlaw {
 impl Distribution for Powerlaw {
     /// Calculates the probability density function (PDF) at a given point `x`.
     ///
-    /// The alpha parameter will be exactly 1.0 greater than that of more
-    /// common expressions such as the PDF listed at:
-    /// <https://en.wikipedia.org/wiki/Pareto_distribution>
+    /// f(x) = ((alpha - 1) / x_min) * (x / x_min)^(-alpha)
     ///
     /// # Parameters
     /// - `x`: The point at which to evaluate the PDF. Must be greater than or equal to `x_min`.
@@ -42,6 +52,8 @@ impl Distribution for Powerlaw {
 
     /// Calculates the cumulative distribution function (CDF) value at a given point `x`.
     ///
+    /// F(x) = 1 - (x / x_min)^(-alpha + 1)
+    ///
     /// # Parameters
     /// - `x`: The point at which to evaluate the CDF.
     ///
@@ -53,6 +65,8 @@ impl Distribution for Powerlaw {
 
     /// Calculates the complementary cumulative distribution function (CCDF)
     /// (also known as the survival function) value at a given point `x`.
+    ///
+    /// S(x) = (x / x_min)^(-alpha + 1)
     ///
     /// # Parameters
     /// - `x`: The point at which to evaluate the CCDF.
@@ -88,21 +102,26 @@ impl Distribution for Powerlaw {
     }
 }
 
-/// Calculates the Maximum Likelihood Estimate (MLE) for the alpha parameter of a power-law distribution.
-///
-/// # Parameters
-/// - `data`: A slice of `f64` values representing the data points. It's assumed that all `x` in `data` are `>= x_min`.
-/// - `x_min`: The minimum value of the distribution.
-///
-/// # Returns
-/// The estimated alpha parameter as an `f64`.
-pub fn alpha_hat(data: &[f64], x_min: f64) -> f64 {
-    let n: usize = data.len();
+impl Powerlaw {
+    pub fn new(alpha: f64, x_min: f64) -> Self {
+        if alpha <= 0. || x_min <= 0. {
+            panic!("alpha and x_min parameters for powerlaw distribution must be positive. (a > 0, x_min > 0).");
+        }
+        Powerlaw { alpha, x_min }
+    }
+}
 
-    let logs = data.iter().map(|x: &f64| (x / x_min).ln());
-    let sum_of_logs: f64 = logs.sum();
-
-    1. + n as f64 / sum_of_logs
+/// Creates a `Powerlaw` distribution directly from a `ParetoFit` result.
+///
+/// This converts the Pareto shape parameter to the Powerlaw exponent:
+/// `powerlaw_alpha = pareto_fit.alpha + 1.0`
+impl From<ParetoFit> for Powerlaw {
+    fn from(fitment: ParetoFit) -> Self {
+        Self {
+            alpha: fitment.alpha + 1.,
+            x_min: fitment.x_min,
+        }
+    }
 }
 
 #[cfg(test)]
@@ -128,5 +147,30 @@ mod tests {
         for (a, b) in ll.iter().zip(expected.iter()) {
             assert!((a - b).abs() < 1e-9);
         }
+    }
+
+    #[test]
+    fn test_alpha_hat() {
+        let data = vec![1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0];
+        let x_min = 1.0;
+        // alpha_hat = 1 + n / sum(ln(x/x_min))
+        // sum_ln = 15.104412573
+        // n = 10
+        // alpha = 1 + 10 / 15.1044... = 1.66205...
+        let alpha = alpha_hat(&data, x_min);
+        assert!((alpha - 1.66205).abs() < 1e-4);
+    }
+
+    #[test]
+    fn test_from_pareto_fit() {
+        let fit = ParetoFit {
+            x_min: 2.5,
+            alpha: 1.5,
+            d: 0.1,
+            len_tail: 100,
+        };
+        let pl = Powerlaw::from(fit);
+        assert_eq!(pl.x_min, 2.5);
+        assert_eq!(pl.alpha, 2.5); // 1.5 + 1.0
     }
 }

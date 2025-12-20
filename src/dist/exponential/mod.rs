@@ -85,7 +85,7 @@ impl Distribution for Exponential {
     /// The CCDF value at `x`.
     fn ccdf(&self, x: f64) -> f64 {
         if x < self.x_min {
-            return 1.;  // entire mass is > x_min
+            return 1.; // entire mass is > x_min
         }
         //for x >= x_min, it's 1 - F9X)
         return 1. - self.cdf(x);
