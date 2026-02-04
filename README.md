@@ -8,7 +8,7 @@ A Rust library and command-line tool for analyzing power-law distributions in em
 
 ## Overview
 
-`powerlaw` is a high-performance Rust library developed to assist in parameter estimation and hypothesis testing of power-law distributed data. Such distributions are of interest in numerous fields of study, from natural to social sciences.
+`powerlaw` is the high-performance Rust library backend of the Python package [powerlawrs](https://github.com/aulichny3/powerlawrs) developed to assist in parameter estimation and hypothesis testing of power-law distributed data. Such distributions are of interest in numerous fields of study, from natural to social sciences.
 
 The methodology is heavily based on the techniques and statistical framework described in the paper ['Power-Law Distributions in Empirical Data'](https://doi.org/10.1137/070710111) by Aaron Clauset, Cosma Rohilla Shalizi, and M. E. J. Newman.
 
