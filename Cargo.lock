@@ -404,7 +404,7 @@ dependencies = [
 
 [[package]]
 name = "powerlaw"
-version = "0.0.25"
+version = "0.0.26"
 dependencies = [
  "clap",
  "criterion",
