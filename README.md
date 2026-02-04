@@ -8,7 +8,7 @@ A Rust library and command-line tool for analyzing power-law distributions in em
 
 ## Overview
 
-`powerlaw` is a high-performance Rust library developed to assist in parameter estimation and hypothesis testing of power-law distributed data. Such distributions are of interest in numerous fields of study, from natural to social sciences.
+`powerlaw` is the high-performance Rust library backend of the Python package [powerlawrs](https://github.com/aulichny3/powerlawrs) developed to assist in parameter estimation and hypothesis testing of power-law distributed data. Such distributions are of interest in numerous fields of study, from natural to social sciences.
 
 The methodology is heavily based on the techniques and statistical framework described in the paper ['Power-Law Distributions in Empirical Data'](https://doi.org/10.1137/070710111) by Aaron Clauset, Cosma Rohilla Shalizi, and M. E. J. Newman.
 
@@ -164,21 +164,21 @@ fn main() {
         pareto_fit.x_min, pareto_fit.alpha
     );
 
-    // 3. Create a manager to hold the results of fitting other distributions
+    // 3. Create a manager to hold the results of fitting other distributions for comparison later.
     let mut results = FittedResults::new();
 
     // 4. Create fully-formed distribution objects from the initial pareto_fit
     //    and add them to the results manager.
 
-    // Create a Pareto distribution from the pareto_fit struct for access to pdf(), cdf() etc  
+    // Create a Pareto distribution object from the pareto_fit struct for access to pdf(), cdf() etc  
     let pareto_dist = Pareto::from(pareto_fit.clone());
     results.add(pareto_dist);
 
-    // Create an Shifted Exponential distribution using the x_min from the pareto_fit
+    // Create an Shifted Exponential distribution object using the x_min from the pareto_fit
     let exp_dist = Exponential::from_fitment(&data, &pareto_fit);
     results.add(exp_dist);
 
-    // (In the future, you could add more distributions here, e.g., Lognormal)
+    // (In the future, you could add more distributions here, e.g., Student T etc.)
 
     // 5. Get a summary of all fitted distributions
     println!("\n--- Fitted Distributions Summary ---");
@@ -210,11 +210,13 @@ cargo bench
 ```
 
 ## Limitations
-1. Only the continuous case of the Pareto Type I Distribution is considered for parameter estimation, goodness of fit, and hypothesis testing at this time. This may or may not change with future updates. The example data in the documentation is discrete, thus the results are only an approximation.
-2. Domain knowledge of the data generating process is critical given the methodology used by this package is based on that proposed by the referenced material.
-Specifically the 1 sample Kolmogorov-Smirnov test is used for goodness of fit testing which assumes i.i.d data. Many natural processes data are serially correlated, thus KS testing is not appropriate, see references section below.
-3. This is highly alpha code; backwards compatibility is not guaranteed and should not be expected.
-4. Many more known and unknown.
+1. Only the continuous case of the Pareto Type I Distribution is considered for parameter estimation, goodness of fit, and hypothesis testing conditional on the sample distribution. 
+2. Parameter estimation of other distributions (shifted exponential, lognormal, etc.) is conditional on the tail found during the Pareto Type I model selection step. 
+3. The example data in the documentation is discrete, thus the results are only an approximation.
+4. Domain knowledge of the data generating process is critical given the methodology used by this package is based on that proposed by the referenced material.
+specifically the 1 sample Kolmogorov-Smirnov test is used for goodness of fit testing which assumes i.i.d data. Many natural processes data are serially correlated, thus KS testing is not appropriate, see references section below.
+5. This is highly alpha code; backwards compatibility is not guaranteed and should not be expected.
+6. 
 
 ## License
 
@@ -224,3 +226,10 @@ This project is licensed under either of
 -   MIT license ([LICENSE-MIT](./LICENSE-MIT) or http://opensource.org/licenses/MIT)
 
 at your option.
+
+## References
+Clauset, A., Shalizi, C. R., & Newman, M. E. J. (2009). Power-Law Distributions in Empirical Data. SIAM Review, 51(4), 661–703. [doi:10.1137/070710111](https://doi.org/10.1137/070710111)
+
+Jeff Alstott, Ed Bullmore, Dietmar Plenz. (2014). powerlaw: a Python package for analysis of heavy-tailed distributions. PLoS ONE 9(1): e85777 [doi:10.1371/journal.pone.0085777](http://dx.doi.org/10.1371/journal.pone.0085777)
+
+Zeimbekakis, A., Schifano, E. D., & Yan, J. (2024). On Misuses of the Kolmogorov-Smirnov Test for One-Sample Goodness-of-Fit. The American Statistician, 78(4), 481–487. [10.1080/00031305.2024.2356095](https://doi.org/10.1080/00031305.2024.2356095)
