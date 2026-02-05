@@ -215,8 +215,7 @@ cargo bench
 3. The example data in the documentation is discrete, thus the results are only an approximation.
 4. Domain knowledge of the data generating process is critical given the methodology used by this package is based on that proposed by the referenced material.
 specifically the 1 sample Kolmogorov-Smirnov test is used for goodness of fit testing which assumes i.i.d data. Many natural processes data are serially correlated, thus KS testing is not appropriate, see references section below.
-5. This is highly alpha code; backwards compatibility is not guaranteed and should not be expected.
-6. 
+5. This is highly alpha code; backwards compatibility is not guaranteed and should not be expected. 
 
 ## License
 
